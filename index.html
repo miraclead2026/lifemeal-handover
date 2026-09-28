@@ -345,6 +345,43 @@ body{font-family:var(--sans)}
 
 
 /* ===== simple layout ===== */
+:root{--g-bg:#E8F0FE;--g-ink:#1A56C7;--n-bg:#E6F6EC;--n-ink:#127A3E;--k-bg:#FFF6CC;--k-ink:#7A5D00}
+@media (prefers-color-scheme:dark){:root{--g-bg:#1B2A45;--g-ink:#9CC0FF;--n-bg:#12291C;--n-ink:#7BD6A2;--k-bg:#2E2810;--k-ink:#F0D36A}}
+.ssobox{display:flex;align-items:center;gap:6px;padding:4px 2px;min-width:0}
+.sso-chip{flex:none;display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;font-size:11.5px;font-weight:500;white-space:nowrap}
+.sso-google{background:var(--g-bg);color:var(--g-ink)}
+.sso-naver{background:var(--n-bg);color:var(--n-ink)}
+.sso-kakao{background:var(--k-bg);color:var(--k-ink)}
+.sso-id{font-family:var(--mono);font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.idbox{display:flex;align-items:center;gap:3px}
+.idbox .cell{flex:1}
+.mini.g{font-weight:700;color:var(--g-ink);border-color:var(--line)}
+.mini.g:hover{background:var(--g-bg);border-color:var(--g-ink)}
+.acat{margin-top:26px}
+.acat-h{display:flex;align-items:baseline;gap:8px;font-size:14px;font-weight:600;color:var(--navy);margin-bottom:10px}
+.acat-h span{font-size:12px;color:var(--muted);font-weight:400}
+.acards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-items:start}
+.acard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.acard.is-open{border-color:var(--navy)}
+.ac-top{display:flex;align-items:center;gap:8px;min-width:0}
+.ac-top h3{font-size:15.5px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ac-link{margin-left:auto;font-size:12px;flex:none}
+.ac-grid{display:grid;grid-template-columns:56px minmax(0,1fr);gap:6px 10px;align-items:center}
+.ac-l{font-size:12px;color:var(--muted)}
+.ac-top-l{align-self:start;padding-top:7px}
+.cell.memo{resize:vertical;min-height:52px;line-height:1.5;font-family:inherit}
+.ac-v{min-width:0}
+.ac-v .cell.box{padding:6px 8px}
+.paybox{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.paybox .daycell{width:52px;flex:none}
+.paybox .amtcell{width:110px;flex:none}
+.ac-foot{display:flex;gap:6px;border-top:1px solid var(--line-soft);padding-top:10px}
+.ac-btn{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--ink-2);cursor:pointer}
+.ac-btn:hover,.ac-btn.on{border-color:var(--navy);color:var(--navy);background:var(--navy-soft)}
+.ac-sec{border-top:1px solid var(--line-soft);padding-top:10px}
+.acard .exp-fields{grid-template-columns:1fr 1fr}
+.pw-sso{font-size:12px;color:var(--muted);padding:0 8px}
+.count .gcount{color:var(--g-ink)}
 .bar-in{max-width:1180px;gap:18px}
 .tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0}
 .tabs::-webkit-scrollbar{display:none}
@@ -478,7 +515,7 @@ var S={
   nodes:{},ivs:{},seq:0,
   tab:'acc',view:'home',editing:null,homeEdit:false,armed:null,stale:false,
   conn:null,pending:0,err:'',busy:false,last:Date.now(),
-  q:'',open:{},showPw:{},editHow:null,remember:true,toolsOpen:false,masterOpen:false,applying:false
+  q:'',open:{},more:{},showPw:{},editHow:null,remember:true,toolsOpen:false,masterOpen:false,applying:false
 };
 var db=null,nodesRef=null,connRef=null,authReady=null;
 
@@ -838,47 +875,58 @@ function gateHTML(){
 /* ================= accounts (main table) ================= */
 function accHTML(){
   var all=accounts(),q=S.q.trim().toLowerCase();
-  var rows=all.filter(function(x){return !q||[x.name,x.cat,x.login,x.note,x.owner,x.url].join(' ').toLowerCase().indexOf(q)>=0});
-  var noPw=all.filter(function(a){return !a.pw}).length;
-  var h='<div class="top"><div><h1 class="ttl">계정</h1><p class="sub">칸을 눌러 바로 입력하면 자동 저장됩니다. 서비스 이름을 누르면 로그인 방법과 상세 정보가 펼쳐집니다.</p></div>'
+  var rows=all.filter(function(x){return !q||[x.name,x.cat,x.login,x.note,x.owner,x.url,SSO[x.sso]||''].join(' ').toLowerCase().indexOf(q)>=0});
+  var noPw=all.filter(function(a){return !a.pw&&!a.sso}).length,gN=all.filter(function(a){return a.sso==='google'}).length;
+  var h='<div class="top"><div><h1 class="ttl">계정</h1><p class="sub">칸에 바로 입력하면 자동 저장됩니다. 구글로 로그인하는 계정은 아이디 옆 G를 누르세요.</p></div>'
     +'<div class="top-r"><input class="inp search" id="q" type="search" placeholder="검색" value="'+esc(S.q)+'"></div></div>'
-    +'<p class="count">계정 '+all.length+'개'+(noPw?' · <span class="warn">비밀번호 미입력 '+noPw+'개</span>':'')+'</p>';
-  h+='<div class="tbl-wrap"><table class="tbl"><thead><tr><th class="c-svc">서비스</th><th class="c-id">아이디</th><th class="c-pw">비밀번호</th><th class="c-day">결제일</th><th class="c-amt">금액 (원)</th><th class="c-memo">메모</th></tr></thead><tbody>';
+    +'<p class="count">계정 '+all.length+'개'+(gN?' · <span class="gcount">미라클 구글 로그인 '+gN+'개</span>':'')+(noPw?' · <span class="warn">비밀번호 미입력 '+noPw+'개</span>':'')+'</p>';
   var cats=uniq(CATS.concat(rows.map(function(r){return r.cat||'사무실·기타'})));
   cats.forEach(function(c){
     var rs=rows.filter(function(r){return (r.cat||'사무실·기타')===c});if(!rs.length)return;
-    h+='<tr class="cat"><td colspan="6">'+esc(c)+'</td></tr>';
-    rs.forEach(function(r){h+=rowHTML(r)});
+    h+='<section class="acat"><h2 class="acat-h">'+esc(c)+'<span>'+rs.length+'</span></h2><div class="acards">'+rs.map(cardHTML).join('')+'</div></section>';
   });
-  if(!rows.length)h+='<tr><td colspan="6" class="empty-row">검색 결과가 없습니다.</td></tr>';
-  h+='</tbody></table></div><button class="btn add" data-act="acc-add">계정 추가</button>';
-  return h;
+  if(!rows.length)h+='<p class="hint">검색 결과가 없습니다.</p>';
+  return h+'<button class="btn add" data-act="acc-add">계정 추가</button>';
 }
-function cell(r,f,ph,cls,type){return '<input class="cell'+(cls?' '+cls:'')+'" data-id="'+esc(r.id)+'" data-f="'+f+'"'+(type?' type="'+type+'"':'')+' value="'+esc(f==='amount'?comma(r[f]):(r[f]||''))+'" placeholder="'+esc(ph||'')+'" aria-label="'+esc(r.name)+' '+f+'" autocomplete="off">'}
-function rowHTML(r){
-  var open=!!S.open[r.id],np=nextPay(r),show=!!S.showPw[r.id];
-  var h='<tr class="row'+(open?' is-open':'')+'">'
-    +'<td class="c-svc"><button class="svc" data-act="toggle" data-id="'+esc(r.id)+'" aria-expanded="'+open+'"><span class="chev"></span><span class="nm">'+esc(r.name||'(이름 없음)')+'</span></button></td>'
-    +'<td class="c-id">'+cell(r,'login','아이디','mono')+'</td>'
-    +'<td class="c-pw"><div class="pwbox">'+cell(r,'pw','비밀번호','mono',show?'text':'password')+'<button class="mini" data-act="pw-eye" data-id="'+esc(r.id)+'" title="보기">'+(show?'숨김':'보기')+'</button><button class="mini" data-act="pw-copy" data-id="'+esc(r.id)+'" title="복사">복사</button></div></td>'
-    +'<td class="c-day"><div class="daybox">'+(r.cycle==='y'?'<span class="yr">'+(num(r.paymonth)||'?')+'월</span>':'')+cell(r,'payday','','num')+'<span class="unit">일</span></div>'+(np?'<span class="dd'+(np.days<=3?' soon':'')+'">'+(np.days===0?'오늘':'D-'+np.days)+'</span>':'')+'</td>'
-    +'<td class="c-amt">'+cell(r,'amount','','num')+'</td>'
-    +'<td class="c-memo">'+cell(r,'note','')+'</td></tr>';
-  if(open)h+='<tr class="exp"><td colspan="6">'+expHTML(r)+'</td></tr>';
-  return h;
+var SSO={google:'미라클 구글',naver:'네이버 로그인',kakao:'카카오 로그인'};
+function googleId(){var g=findAcc('a31');return (g&&g.login)||''}
+function cell(r,f,ph,cls,type){return '<input class="cell box'+(cls?' '+cls:'')+'" data-id="'+esc(r.id)+'" data-f="'+f+'"'+(type?' type="'+type+'"':'')+' value="'+esc(f==='amount'?comma(r[f]):(r[f]||''))+'" placeholder="'+esc(ph||'')+'" aria-label="'+esc(r.name)+' '+f+'" autocomplete="off">'}
+function cardHTML(r){
+  var open=!!S.open[r.id],more=!!S.more[r.id],np=nextPay(r),show=!!S.showPw[r.id],href=hrefOf(r.url);
+  var h='<article class="acard'+(open||more?' is-open':'')+'">'
+    +'<div class="ac-top"><h3>'+esc(r.name||'(이름 없음)')+'</h3>'
+    +(r.sso?'<span class="sso-chip sso-'+esc(r.sso)+'">'+esc(SSO[r.sso]||r.sso)+'</span>':'')
+    +(href?'<a class="ac-link" href="'+esc(href)+'" target="_blank" rel="noopener">열기</a>':'')+'</div>'
+    +'<div class="ac-grid">'
+    +'<span class="ac-l">아이디</span><div class="ac-v">'+(r.sso==='google'
+        ?'<div class="ssobox"><span class="sso-id">'+esc(googleId()||'미라클 구글 계정')+'</span><button class="mini" data-act="sso" data-id="'+esc(r.id)+'" title="구글 로그인 표시 해제">해제</button></div>'
+        :'<div class="idbox">'+cell(r,'login',r.sso?'연결된 계정 아이디':'아이디','mono')+(r.sso?'':'<button class="mini g" data-act="sso" data-id="'+esc(r.id)+'" title="미라클 구글 로그인으로 표시">G</button>')+'</div>')+'</div>'
+    +'<span class="ac-l">비밀번호</span><div class="ac-v">'+(r.sso
+        ?'<span class="pw-sso">'+(r.sso==='google'?'구글 계정 비밀번호로 로그인':'연결된 계정 비밀번호로 로그인')+'</span>'
+        :'<div class="pwbox">'+cell(r,'pw','비밀번호','mono',show?'text':'password')+'<button class="mini" data-act="pw-eye" data-id="'+esc(r.id)+'">'+(show?'숨김':'보기')+'</button><button class="mini" data-act="pw-copy" data-id="'+esc(r.id)+'">복사</button></div>')+'</div>'
+    +'<span class="ac-l">결제</span><div class="ac-v"><div class="paybox"><span class="unit">'+(r.cycle==='y'?'매년 '+(num(r.paymonth)||'?')+'월':'매월')+'</span>'+cell(r,'payday','','num daycell')+'<span class="unit">일</span>'+cell(r,'amount','금액','num amtcell')+'<span class="unit">원</span>'+(np?'<span class="dd'+(np.days<=3?' soon':'')+'">'+(np.days===0?'오늘':'D-'+np.days)+'</span>':'')+'</div></div>'
+    +'<span class="ac-l ac-top-l">메모</span><div class="ac-v"><textarea class="cell box memo" data-id="'+esc(r.id)+'" data-f="note" rows="2" placeholder="메모" aria-label="'+esc(r.name)+' 메모">'+esc(r.note||'')+'</textarea></div>'
+    +'</div>'
+    +'<div class="ac-foot"><button class="ac-btn'+(open?' on':'')+'" data-act="toggle" data-id="'+esc(r.id)+'">로그인 방법'+(r.how?'':' (비어 있음)')+'</button><button class="ac-btn'+(more?' on':'')+'" data-act="more" data-id="'+esc(r.id)+'">상세 정보</button></div>';
+  if(open)h+='<div class="ac-sec">'+howHTML(r)+'</div>';
+  if(more)h+='<div class="ac-sec">'+moreHTML(r)+'</div>';
+  return h+'</article>';
 }
-function expHTML(r){
-  var href=hrefOf(r.url),armed=S.armed==='del:'+r.id,editHow=S.editHow===r.id;
-  var h='<div class="exp-in"><div class="exp-how"><div class="exp-h"><b>로그인 방법</b>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener">사이트 열기</a>':'')+'<button class="linkbtn" data-act="how-edit" data-id="'+esc(r.id)+'">'+(editHow?'완료':'수정')+'</button></div>';
-  if(editHow)h+='<textarea class="inp" id="how-'+esc(r.id)+'" data-id="'+esc(r.id)+'" data-f="how" rows="6" placeholder="한 줄에 한 단계. 예:&#10;1. 사이트 접속&#10;2. 아이디로 로그인&#10;3. 대표 휴대폰으로 2단계 인증">'+esc(r.how||'')+'</textarea><span class="hint">"1. "로 시작하면 번호가 붙고, "!"로 시작하면 주의 문구가 됩니다.</span>';
-  else h+=r.how?'<div class="howbox">'+itemsHTML(String(r.how).split('\n'))+'</div>':'<p class="hint">아직 없습니다. 수정을 눌러 적어 주세요.</p>';
-  h+='</div><div class="exp-fields">'
+function howHTML(r){
+  var editHow=S.editHow===r.id;
+  var h='<div class="exp-h"><b>로그인 방법</b><button class="linkbtn" data-act="how-edit" data-id="'+esc(r.id)+'">'+(editHow?'완료':'수정')+'</button></div>';
+  if(editHow)return h+'<textarea class="inp" id="how-'+esc(r.id)+'" data-id="'+esc(r.id)+'" data-f="how" rows="6" placeholder="한 줄에 한 단계. 예:&#10;1. 사이트 접속&#10;2. 미라클 구글로 로그인&#10;3. 대표 휴대폰으로 2단계 인증">'+esc(r.how||'')+'</textarea><span class="hint">"1. "로 시작하면 번호가 붙고, "!"로 시작하면 주의 문구가 됩니다.</span>';
+  return h+(r.how?'<div class="howbox">'+itemsHTML(String(r.how).split('\n'))+'</div>':'<p class="hint">아직 없습니다. 수정을 눌러 적어 주세요.</p>');
+}
+function moreHTML(r){
+  var armed=S.armed==='del:'+r.id;
+  return '<div class="exp-fields">'
+    +'<div class="f"><label>로그인 방식</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="sso"><option value="">아이디 · 비밀번호</option><option value="google"'+(r.sso==='google'?' selected':'')+'>미라클 구글 로그인</option><option value="naver"'+(r.sso==='naver'?' selected':'')+'>네이버 아이디 로그인</option><option value="kakao"'+(r.sso==='kakao'?' selected':'')+'>카카오 계정 로그인</option></select></div>'
     +fld(r,'name','서비스 이름')+fldCat(r)+fld(r,'url','접속 주소')+fld(r,'mfa','2차 인증 (받는 휴대폰 등)')+fld(r,'owner','명의 · 담당자')+fld(r,'paymethod','결제 수단 (카드 끝 4자리)')
     +'<div class="f"><label>결제 주기</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="cycle"><option value="">없음</option><option value="m"'+(r.cycle==='m'?' selected':'')+'>매월</option><option value="y"'+(r.cycle==='y'?' selected':'')+'>매년</option></select></div>'
     +(r.cycle==='y'?'<div class="f"><label>결제 월</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="paymonth"><option value="">선택</option>'+[1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){return '<option value="'+m+'"'+(String(r.paymonth)===String(m)?' selected':'')+'>'+m+'월</option>'}).join('')+'</select></div>':'')
     +'<div class="f f-del"><button class="btn sm danger'+(armed?' armed':'')+'" data-act="acc-del" data-id="'+esc(r.id)+'">'+(armed?'한 번 더 누르면 삭제':'이 계정 삭제')+'</button></div>'
-    +'</div></div>';
-  return h;
+    +'</div>';
 }
 function fld(r,f,label){return '<div class="f"><label>'+esc(label)+'</label><input class="cell box" data-id="'+esc(r.id)+'" data-f="'+f+'" value="'+esc(r[f]||'')+'" autocomplete="off"></div>'}
 function fldCat(r){var cats=uniq(CATS.concat(accounts().map(function(a){return a.cat})));return '<div class="f"><label>분류</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="cat">'+cats.map(function(c){return '<option'+(c===r.cat?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select></div>'}
@@ -1021,6 +1069,8 @@ document.addEventListener('click',function(ev){
     case 'lock':forgetDevice();lockAll();break;
     case 'back-lock':S.phase='lock';S.pass=null;S.room=null;S.err='';render();break;
     case 'toggle':S.open[id]=!S.open[id];if(!S.open[id]&&S.editHow===id)S.editHow=null;S.armed=null;render();break;
+    case 'more':S.more[id]=!S.more[id];S.armed=null;render();break;
+    case 'sso':{var sr=findAcc(id);if(sr){saveField(id,'sso',sr.sso==='google'?'':'google');render()}break}
     case 'pw-eye':S.showPw[id]=!S.showPw[id];render();break;
     case 'pw-copy':{var r=findAcc(id);if(r&&r.pw)copyText(r.pw,t);else toast('비밀번호가 비어 있습니다.');break}
     case 'how-edit':
@@ -1030,13 +1080,13 @@ document.addEventListener('click',function(ev){
     case 'acc-add':{
       var nid=uid('a'),ord=accounts().reduce(function(m,x){return Math.max(m,x.ord||0)},0)+1;
       put('acc_'+nid,{id:nid,ord:ord,cat:'사무실·기타',name:'새 계정',url:'',login:'',pw:'',mfa:'',owner:'',note:'',how:'',cycle:'',payday:'',amount:'',paymethod:''});
-      S.open[nid]=true;S.q='';render();
-      var inp=document.querySelector('.exp [data-id="'+nid+'"][data-f="name"]');if(inp){inp.focus();inp.select()}
+      S.more[nid]=true;S.q='';render();
+      var inp=document.querySelector('.exp-fields [data-id="'+nid+'"][data-f="name"]');if(inp){inp.focus();inp.select()}
       break;}
     case 'acc-del':
       if(S.armed==='del:'+id){del('acc_'+id);delete S.open[id];S.armed=null}else S.armed='del:'+id;
       render();break;
-    case 'goto-acc':S.open[id]=true;S.tab='acc';S.q='';render();var row=document.querySelector('[data-act="toggle"][data-id="'+id+'"]');if(row)row.scrollIntoView({block:'center'});break;
+    case 'goto-acc':S.more[id]=true;S.tab='acc';S.q='';render();var row=document.querySelector('[data-act="more"][data-id="'+id+'"]');if(row)row.scrollIntoView({block:'center'});break;
     case 'tools':S.toolsOpen=!S.toolsOpen;S.masterOpen=false;render();break;
     case 'export':exportBackup();break;
     case 'master':S.masterOpen=!S.masterOpen;render();var m1=$('#ms-1');if(m1)m1.focus();break;
@@ -1074,7 +1124,7 @@ document.addEventListener('change',function(ev){
   }
   if(t.hasAttribute('data-f')&&t.hasAttribute('data-id')&&t.getAttribute('data-f')!=='how'){
     saveField(t.getAttribute('data-id'),t.getAttribute('data-f'),t.value);
-    if(/^(cycle|cat|name|payday)$/.test(t.getAttribute('data-f')))setTimeout(render,0);
+    if(/^(cycle|cat|name|payday|sso)$/.test(t.getAttribute('data-f')))setTimeout(render,0);
     return;
   }
   if(t.hasAttribute('data-task')){var ts=list('tasks').map(function(x){return Object.assign({},x)});ts[+t.getAttribute('data-task')].done=t.checked;put('tasks',{list:ts});render()}
