@@ -742,6 +742,15 @@ a.slot-u:hover{color:var(--navy)}
 .dl{font-weight:500;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--navy) 35%,transparent);text-underline-offset:3px}
 .dl::after{content:"\2197";font-size:.78em;margin-left:2px;opacity:.7}
 .dl:hover{text-decoration-color:var(--navy)}
+
+.slot.is-ext{border-top-style:dashed;background:color-mix(in srgb,var(--surface) 55%,var(--bg))}
+.slot.is-ext .ico{filter:grayscale(1);opacity:.65}
+.slot.is-ext .tbtn{color:var(--ink-2)}
+.tag.ext{flex:none;align-self:flex-start;background:var(--line-soft);color:var(--ink-2);border:1px dashed var(--line)}
+.props .cell.mgr:placeholder-shown{border-color:var(--line);background:var(--surface)}
+.props .cell.mgr:placeholder-shown::placeholder{color:var(--warn);opacity:.9}
+.ext-btn{color:var(--muted)}
+@media (max-width:600px){.filters .seg{max-width:100%}}
 </style>
 </head>
 <body>
@@ -1212,7 +1221,7 @@ function extBtn(href,label,cls){return '<a class="btn primary sm go'+(cls?' '+cl
 /* ================= home ================= */
 function homeHTML(){
   var d=meta(),facts=list('facts'),links=list('links'),secs=sections(),all=accounts(),tasks=list('tasks');
-  var gN=all.filter(function(a){return a.sso==='google'}).length,noPw=all.filter(function(a){return !a.pw&&!a.sso}).length;
+  var gN=all.filter(function(a){return a.sso==='google'}).length,noPw=all.filter(function(a){return !a.pw&&!a.sso&&!a.ext}).length;
   var openT=[];tasks.forEach(function(t,i){if(!t.done)openT.push({t:t,i:i})});
   var bs=bills(),mSum=bs.filter(function(r){return r.cycle!=='y'}).reduce(function(s,r){return s+num(r.amount)},0);
   var up=bs.map(function(r){return {r:r,n:nextPay(r)}}).filter(function(x){return x.n}).sort(function(a,b){return a.n.days-b.n.days});
@@ -1258,20 +1267,24 @@ function homeHTML(){
 /* ================= accounts ================= */
 function accHTML(){
   var all=accounts(),q=S.q.trim().toLowerCase(),lf=S.lf||'',cf=S.cf||'';
-  var base=all.filter(function(x){return !q||[x.name,x.cat,x.login,x.note,x.owner,x.url,SSO[x.sso]||''].join(' ').toLowerCase().indexOf(q)>=0});
+  var of=S.of||'';
+  var base0=all.filter(function(x){return !q||[x.name,x.cat,x.login,x.note,x.owner,x.mgr,x.url,SSO[x.sso]||''].join(' ').toLowerCase().indexOf(q)>=0});
+  var extN=base0.filter(function(x){return x.ext}).length;
+  var base=base0.filter(function(x){return !of||(of==='ext'?x.ext:!x.ext)});
   var byLogin=base.filter(function(x){return !lf||(lf==='google'?x.sso==='google':x.sso!=='google')});
   var rows=byLogin.filter(function(x){return !cf||(x.cat||'사무실·기타')===cf});
-  var gN=base.filter(function(a){return a.sso==='google'}).length,noPw=all.filter(function(a){return !a.pw&&!a.sso}).length;
+  var gN=base.filter(function(a){return a.sso==='google'}).length,noPw=all.filter(function(a){return !a.pw&&!a.sso&&!a.ext}).length;
   var h='<div class="top"><div><h1 class="ttl">계정</h1><p class="sub">사이트 바로가기와 로그인 정보입니다. 칸에 입력하면 바로 저장되고, 결제일·금액·메모는 자세히에서 고칩니다.</p></div>'
     +'<div class="top-r"><input class="inp search" id="q" type="search" placeholder="서비스, 아이디, 메모 검색" value="'+esc(S.q)+'"><button class="btn primary" data-act="acc-add">계정 추가</button></div></div>';
   h+='<div class="filters"><div class="seg" role="group" aria-label="로그인 방식">'
     +[['','전체',base.length],['google','미라클 구글 로그인',gN],['id','아이디 로그인',base.length-gN]].map(function(o){return '<button class="'+(lf===o[0]?'on':'')+(o[0]==='google'?' g':'')+'" data-act="lf" data-v="'+o[0]+'"'+(lf===o[0]?' aria-pressed="true"':'')+'>'+o[1]+'<span class="n">'+o[2]+'</span></button>'}).join('')+'</div>'
+    +'<div class="seg" role="group" aria-label="담당">'+[['','전체 담당',base0.length],['ours','우리 담당',base0.length-extN],['ext','다른 담당자',extN]].map(function(o){return '<button class="'+(of===o[0]?'on':'')+'" data-act="of" data-v="'+o[0]+'"'+(of===o[0]?' aria-pressed="true"':'')+'>'+o[1]+'<span class="n">'+o[2]+'</span></button>'}).join('')+'</div>'
     +(noPw?'<span class="warn-t">비밀번호 미입력 '+noPw+'개</span>':'')+'</div>';
   var cats=uniq(CATS.concat(all.map(function(r){return r.cat||'사무실·기타'})));
   h+='<div class="chips"><button class="chip'+(!cf?' on':'')+'" data-act="cf" data-v="">전체 분류</button>'
     +cats.map(function(c){var n=byLogin.filter(function(r){return (r.cat||'사무실·기타')===c}).length;return n||cf===c?'<button class="chip cat '+catCls(c)+(cf===c?' on':'')+'" data-act="cf" data-v="'+esc(c)+'">'+esc(c)+' <span>'+n+'</span></button>':''}).join('')+'</div>';
   cats.forEach(function(c){
-    var rs=rows.filter(function(r){return (r.cat||'사무실·기타')===c});if(!rs.length)return;
+    var rs=rows.filter(function(r){return (r.cat||'사무실·기타')===c});if(!rs.length)return;rs=rs.filter(function(r){return !r.ext}).concat(rs.filter(function(r){return r.ext}));
     h+='<section class="acat '+catCls(c)+'"><h2 class="acat-h"><span class="cpill">'+esc(c)+'</span><span class="n">'+rs.length+'개</span></h2><div class="acards">'+rs.map(slotHTML).join('')+'</div></section>';
   });
   if(!rows.length)h+='<p class="hint" style="margin-top:24px">조건에 맞는 계정이 없습니다.</p>';
@@ -1293,16 +1306,20 @@ function credProps(r){
       :'<div class="pwbox">'+cell(r,'pw','비밀번호 입력','mono',show?'text':'password')+'<button class="mini" data-act="pw-eye" data-id="'+esc(r.id)+'">'+(show?'숨김':'보기')+'</button><button class="mini" data-act="pw-copy" data-id="'+esc(r.id)+'">복사</button></div>')+'</div></div>';
 }
 function slotHTML(r){
-  var href=hrefOf(r.url),g=r.sso==='google';
-  return '<article class="slot '+catCls(r.cat)+(g?' is-g':'')+'">'
+  var href=hrefOf(r.url),g=r.sso==='google',x=!!r.ext;
+  return '<article class="slot '+catCls(r.cat)+(g?' is-g':'')+(x?' is-ext':'')+'">'
     +'<div class="slot-h"><span class="ico'+(g?' g':'')+'" aria-hidden="true">'+initial(r.name)+'</span><div class="slot-t"><h3><button class="tbtn" data-act="peek" data-id="'+esc(r.id)+'">'+esc(r.name||'(이름 없음)')+'</button></h3>'
     +(href?'<a class="slot-u" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(shortUrl(r.url))+'</a>':'<span class="slot-u none">주소 없음</span>')+'</div>'
-    +(g?'<span class="gbadge" title="미라클 구글 로그인">G</span>':'')+'</div>'
-    +'<div class="props">'+credProps(r)
+    +(x?'<span class="tag ext">다른 담당</span>':(g?'<span class="gbadge" title="미라클 구글 로그인">G</span>':''))+'</div>'
+    +'<div class="props">'+(x
+      ?'<div class="prop"><span class="pl">담당자</span><div class="pv">'+cell(r,'mgr','담당자 이름 입력','mgr')+'</div></div>'
+      :credProps(r))
     +(r.note?'<div class="prop top"><span class="pl">메모</span><div class="pv note-v">'+esc(r.note)+'</div></div>':'')+'</div>'
     +'<div class="slot-f">'+(href?extBtn(href,'바로가기'):'<button class="btn sm" data-act="peek" data-id="'+esc(r.id)+'">주소 입력</button>')
     +'<span class="sp"></span>'+(r.cycle?'<span class="tag">'+(r.cycle==='y'?'연 결제':'월 결제')+'</span>':'')
-    +'<button class="btn sm save" data-act="save">저장</button><button class="btn sm ghost" data-act="peek" data-id="'+esc(r.id)+'">자세히</button></div>'
+    +'<button class="btn sm save" data-act="save">저장</button>'
+    +'<button class="btn sm ghost ext-btn" data-act="ext-toggle" data-id="'+esc(r.id)+'" title="'+(x?'우리 팀 담당으로 되돌립니다':'우리 팀이 담당하지 않는 계정으로 표시하고 담당자 이름을 적습니다')+'">'+(x?'우리 담당으로':'담당 아님')+'</button>'
+    +'<button class="btn sm ghost" data-act="peek" data-id="'+esc(r.id)+'">자세히</button></div>'
     +'</article>';
 }
 function peekHTML(r){
@@ -1311,6 +1328,7 @@ function peekHTML(r){
     +'<div class="peek-top"><span class="crumb">계정 <span class="cpill sm">'+esc(r.cat||'사무실·기타')+'</span></span><button class="x-btn" data-act="peek-close" aria-label="닫기">×</button></div>'
     +'<div class="peek-h"><span class="ico lg'+(g?' g':'')+'" aria-hidden="true">'+initial(r.name)+'</span><div class="ph-t"><h2>'+esc(r.name||'(이름 없음)')+'</h2>'+(href?'<a class="u" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(shortUrl(r.url))+'</a>':'<span class="u">주소를 아래 기본 정보에 넣어 주세요</span>')+'</div>'+(href?extBtn(href,'바로가기'):'')+'</div>'
     +'<div class="peek-b">'
+    +'<section class="pk"><h3>담당</h3><div class="props"><div class="prop"><span class="pl">담당</span><div class="pv"><div class="lseg" role="group" aria-label="담당"><button class="'+(r.ext?'':'on')+'" data-act="ext-set" data-id="'+esc(r.id)+'" data-v="">우리 팀</button><button class="'+(r.ext?'on':'')+'" data-act="ext-set" data-id="'+esc(r.id)+'" data-v="1">다른 담당자</button></div></div></div>'+(r.ext?'<div class="prop"><span class="pl">담당자</span><div class="pv">'+cell(r,'mgr','담당자 이름 입력')+'</div></div>':'')+'</div></section>'
     +'<section class="pk"><h3>로그인</h3><div class="props">'+credProps(r)
     +'<div class="prop"><span class="pl">2차 인증</span><div class="pv">'+cell(r,'mfa','받는 휴대폰 등')+'</div></div></div></section>'
     +'<section class="pk">'+howHTML(r)+'</section>'
@@ -1519,6 +1537,8 @@ document.addEventListener('click',function(ev){
     case 'save':flushBox(t.closest('.slot'));toast('저장했습니다');setTimeout(render,0);break;
     case 'peek-done':flushBox($('.peek'));closePeek();toast('저장했습니다');break;
     case 'lf':S.lf=t.getAttribute('data-v')||'';render();break;
+    case 'of':S.of=t.getAttribute('data-v')||'';render();break;
+    case 'ext-toggle':case 'ext-set':{var er=findAcc(id);if(!er)break;var nv=a==='ext-set'?(t.getAttribute('data-v')||''):(er.ext?'':'1');saveField(id,'ext',nv);render();if(nv){var mi2=document.querySelector((S.peek===id?'.peek':'.slot')+' [data-id="'+id+'"][data-f="mgr"]');if(mi2&&!mi2.value)mi2.focus()}break}
     case 'cf':S.cf=t.getAttribute('data-v')||'';render();break;
     case 'sso-set':saveField(id,'sso',t.getAttribute('data-v')||'');render();break;
     case 'id-copy':{var ir=findAcc(id),iv=ir?(ir.sso==='google'?googleId():ir.login):'';if(iv)copyText(iv,t);else toast('아이디가 비어 있습니다.');break}
@@ -1579,7 +1599,7 @@ document.addEventListener('change',function(ev){
   if(t.hasAttribute('data-sec-group')){var sg=secById(t.getAttribute('data-sec-group'));if(sg){var o2=Object.assign({},sg),v2=t.value.trim();if(v2)o2.group=v2;else delete o2.group;put('sec_'+o2.id,o2);setTimeout(render,0)}return}
   if(t.hasAttribute('data-f')&&t.hasAttribute('data-id')&&t.getAttribute('data-f')!=='how'){
     saveField(t.getAttribute('data-id'),t.getAttribute('data-f'),t.value);
-    if(/^(cycle|paymonth|cat|name|payday|sso|url)$/.test(t.getAttribute('data-f')))setTimeout(render,0);
+    if(/^(cycle|paymonth|cat|name|payday|sso|url|ext)$/.test(t.getAttribute('data-f')))setTimeout(render,0);
     return;
   }
   if(t.hasAttribute('data-task')){var ts=list('tasks').map(function(x){return Object.assign({},x)});ts[+t.getAttribute('data-task')].done=t.checked;put('tasks',{list:ts});render()}
