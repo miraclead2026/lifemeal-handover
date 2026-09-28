@@ -1089,13 +1089,13 @@ function payLabel(r){if(!r.cycle)return '';return (r.cycle==='y'?'매년 '+(num(
 
 /* ================= shell & routing ================= */
 var CATS=['판매 채널','연동·물류','광고','SNS·고객 채널','콘텐츠·디자인','AI·개발·협업','업무·협업','사무실·기타'];
-var DOC_GROUPS=['팀과 업무','브랜드·콘텐츠','채널·운영','툴·노하우'];
-var DOC_DEFAULT={'처음 시작하기':'팀과 업무','자료 위치 (구글 드라이브)':'팀과 업무','물류·CS (네이처온)':'채널·운영','사람과 역할':'팀과 업무','업무 현황':'팀과 업무','작업 방식':'팀과 업무','브랜드와 제품':'브랜드·콘텐츠','카피와 표현 지침':'브랜드·콘텐츠','캠페인 기록':'브랜드·콘텐츠','채널과 광고':'채널·운영','자사몰 리뉴얼':'채널·운영','대시보드와 웹페이지':'채널·운영','툴과 제작 노하우':'툴·노하우'};
+var DOC_GROUPS=['팀과 업무','브랜드·콘텐츠','디자인','채널·운영','툴·노하우'];
+var DOC_DEFAULT={'처음 시작하기':'팀과 업무','자료 위치 (구글 드라이브)':'팀과 업무','물류·CS (네이처온)':'채널·운영','디자인 기준':'디자인','디자인 사이즈':'디자인','사람과 역할':'팀과 업무','업무 현황':'팀과 업무','작업 방식':'팀과 업무','브랜드와 제품':'브랜드·콘텐츠','카피와 표현 지침':'브랜드·콘텐츠','캠페인 기록':'브랜드·콘텐츠','채널과 광고':'채널·운영','자사몰 리뉴얼':'디자인','대시보드와 웹페이지':'채널·운영','툴과 제작 노하우':'툴·노하우'};
 function docGroup(s){return (s&&s.group)||DOC_DEFAULT[s&&s.title]||'기타'}
 function docGroups(){return uniq(DOC_GROUPS.concat(sections().map(docGroup)))}
 var CC_N=8;
 function catCls(c){c=c||'사무실·기타';var i=CATS.indexOf(c);if(i<0){i=0;for(var k=0;k<c.length;k++)i=(i*31+c.charCodeAt(k))%CC_N}return 'cc'+i}
-function grpCls(g){var i=DOC_GROUPS.indexOf(g);return 'cc'+(i<0?7:[0,4,2,5][i])}
+function grpCls(g){var i=DOC_GROUPS.indexOf(g);return 'cc'+(i<0?7:[0,4,3,2,5][i])}
 function menuDocs(){var ss=sections(),o=[];docGroups().forEach(function(g){ss.forEach(function(s){if(docGroup(s)===g)o.push(s)})});return o}
 var SSO={google:'미라클 구글',naver:'네이버 로그인',kakao:'카카오 로그인'};
 function googleId(){var g=findAcc('a31');return (g&&g.login)||''}
