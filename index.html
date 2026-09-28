@@ -489,6 +489,227 @@ select.cell{appearance:auto}
   .exp-in{grid-template-columns:1fr;padding:14px}
   .exp-fields{grid-template-columns:1fr}
 }
+
+/* ===== site layout v3: sidebar + home ===== */
+.app{display:grid;grid-template-columns:256px minmax(0,1fr);min-height:100vh}
+.app.locked{grid-template-columns:minmax(0,1fr)}
+.app.locked .side,.app.locked .side-scrim,.app.locked .menu-btn{display:none!important}
+.side{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 12px 14px;scrollbar-width:thin}
+.side-brand{display:flex;flex-direction:column;gap:2px;padding:2px 10px 16px;text-decoration:none!important}
+.side-brand .eyebrow{font-size:10.5px;letter-spacing:.2em;color:var(--navy);font-weight:600}
+.side-brand b{font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.side-brand .env-test{align-self:flex-start;margin-top:4px}
+.menu{display:flex;flex-direction:column;gap:1px;flex:1}
+.menu-h{font-size:11px;color:var(--muted);letter-spacing:.06em;padding:18px 10px 6px;font-weight:500}
+.menu-sub{font-size:11.5px;color:var(--ink-2);padding:10px 10px 3px;font-weight:600}
+.mi{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:7px;color:var(--ink-2);font-size:13.5px;text-decoration:none!important;min-width:0}
+.mi:hover{background:var(--bg);color:var(--ink)}
+.mi.on{background:var(--navy-soft);color:var(--navy);font-weight:600}
+.mi .svg{flex:none;opacity:.85}
+.mi .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mi .n{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:400}
+.mi.doc{padding:5px 10px 5px 14px;font-size:13px}
+.mi.doc::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--line);flex:none;margin-right:2px}
+.mi.doc.on::before{background:var(--navy)}
+.menu-add{margin:10px 10px 0;border:1px dashed var(--line);background:none;border-radius:7px;padding:6px 10px;font-size:12.5px;color:var(--muted);cursor:pointer;text-align:left}
+.menu-add:hover{border-color:var(--navy);color:var(--navy)}
+.side-foot{border-top:1px solid var(--line-soft);margin-top:16px;padding:12px 4px 0 10px;display:flex;align-items:center;gap:2px}
+.side-foot .sp{flex:1}
+.side-foot .lk{display:inline-flex;align-items:center;gap:5px;border:0;background:none;font-size:12.5px;color:var(--muted);cursor:pointer;padding:5px 7px;border-radius:6px;text-decoration:none!important}
+.side-foot .lk:hover,.side-foot .lk.on{color:var(--navy);background:var(--navy-soft)}
+.side-foot .lk .svg{width:14px;height:14px}
+.side-scrim{display:none}
+.col{min-width:0;display:flex;flex-direction:column}
+.mbar{display:none}
+.page{width:100%;max-width:1160px;margin:0 auto;padding:36px 40px 80px}
+.app.locked .page{max-width:none;padding:0}
+body.noscroll{overflow:hidden}
+.svg{display:inline-block;vertical-align:middle}
+
+/* home */
+.hero{padding-bottom:22px}
+.hero h1{font-size:32px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:28px}
+.tile{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;color:var(--ink);text-decoration:none!important;cursor:pointer;text-align:left;min-width:0;font:inherit}
+.tile:hover{border-color:var(--navy)}
+.tile .l{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+.tile .v{font-size:28px;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.15}
+.tile .v small{font-size:14px;margin-left:2px;color:var(--ink-2)}
+.tile .s{font-size:12px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:2px 10px;min-width:0}
+.tile .s span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.tile .s .g{color:var(--g-ink)}.tile .s .w{color:var(--warn)}
+.blk{margin-top:44px}
+.blk-h{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.blk-h h2{font-size:17px;font-weight:600}
+.blk-h .c{font-size:12.5px;color:var(--muted)}
+.blk-h .r{margin-left:auto;align-self:center}
+.shortcuts{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.sc{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 12px;text-decoration:none!important;color:var(--ink);min-width:0}
+a.sc:hover{border-color:var(--navy)}
+a.sc:hover .sc-x{color:var(--navy)}
+.sc.off{opacity:.6}
+.sc-t{display:flex;flex-direction:column;min-width:0;flex:1}
+.sc-t b{font-weight:500;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-t small{font-family:var(--mono);font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-x{flex:none;color:var(--muted);width:14px;height:14px}
+.ico{flex:none;width:34px;height:34px;border-radius:9px;background:var(--navy-soft);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px}
+.ico.g{background:var(--g-bg);color:var(--g-ink)}
+.ico.lg{width:48px;height:48px;border-radius:12px;font-size:19px}
+.split2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:44px}
+.panel-h .more{font-size:12.5px;margin-left:auto}
+.hl{list-style:none;margin:0;padding:0}
+.hl li{display:grid;grid-template-columns:18px auto minmax(0,1fr);gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--line-soft);font-size:13.5px}
+.hl li:first-child{border-top:0}
+.hl input{width:16px;height:16px;margin:3px 0 0;accent-color:var(--navy);cursor:pointer}
+.hl .area{font-size:11.5px;color:var(--navy);background:var(--navy-soft);border-radius:5px;padding:1px 7px;white-space:nowrap;margin-top:1px}
+.hl.pay li{grid-template-columns:44px auto minmax(0,1fr) auto;align-items:center}
+.hl.pay .dd{margin-left:0}
+.hl .t{min-width:0}
+.hl.pay .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hl .a{color:var(--ink-2)}
+.hl li.clk{cursor:pointer}
+.hl li.clk:hover .t{color:var(--navy)}
+.dgroup{margin-top:18px}
+.dgroup:first-of-type{margin-top:0}
+.dg-h{font-size:12.5px;font-weight:600;color:var(--navy);margin-bottom:10px;letter-spacing:.02em}
+a.card{color:var(--ink);text-decoration:none!important}
+a.card h3{font-size:16px}
+
+/* accounts */
+.filters{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:8px 0 12px}
+.seg{display:inline-flex;background:var(--line-soft);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:8px;font-size:13px;color:var(--ink-2);cursor:pointer;display:flex;gap:6px;align-items:center}
+.seg button .n{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.seg button.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(19,26,38,.1)}
+.seg button.on.g{color:var(--g-ink)}
+.warn-t{font-size:12.5px;color:var(--warn)}
+.chip span{color:var(--muted);margin-left:2px}
+.chip.on span{color:inherit;opacity:.75}
+.chips.static .chip{cursor:default;display:inline-flex;align-items:center}
+.top-r{align-items:center}
+.top-r .search{width:260px;flex:0 1 260px}
+.acat{margin-top:30px}
+.acards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;align-items:stretch}
+.slot{background:var(--surface);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;min-width:0;transition:box-shadow .15s,border-color .15s}
+.slot:hover{box-shadow:0 6px 20px rgba(19,26,38,.07);border-color:color-mix(in srgb,var(--navy) 28%,var(--line))}
+.slot-h{display:flex;gap:12px;align-items:center;padding:16px 16px 10px;min-width:0}
+.slot-t{min-width:0;display:flex;flex-direction:column;flex:1}
+.slot-t h3{font-size:15px;font-weight:600;line-height:1.35;min-width:0}
+.tbtn{border:0;background:none;padding:0;font:inherit;color:var(--ink);cursor:pointer;text-align:left;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.tbtn:hover{color:var(--navy);text-decoration:underline;text-underline-offset:3px}
+.slot-u{font-family:var(--mono);font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+a.slot-u:hover{color:var(--navy)}
+.slot-u.none{font-family:var(--sans)}
+.gbadge{flex:none;width:22px;height:22px;border-radius:6px;background:var(--g-bg);color:var(--g-ink);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;align-self:flex-start}
+.props{display:flex;flex-direction:column;gap:2px;padding:0 16px 12px}
+.prop{display:grid;grid-template-columns:60px minmax(0,1fr);gap:8px;align-items:center;min-height:34px}
+.prop.top{align-items:start}
+.prop.top .pl{padding-top:3px}
+.pl{font-size:12px;color:var(--muted)}
+.pv{min-width:0}
+.props .cell.box{border-color:transparent;background:transparent;padding:5px 8px;font-size:13px}
+.props .cell.box:hover{border-color:var(--line);background:var(--surface)}
+.props .cell.box:focus{border-color:var(--navy);background:var(--surface)}
+.props .cell[data-f="pw"]:placeholder-shown::placeholder{color:var(--warn);opacity:.9}
+.ro-v{display:flex;align-items:center;gap:6px;padding:0 0 0 8px;min-width:0}
+.ell{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+.pw-sso{font-size:12.5px;color:var(--muted);padding:0 8px}
+.note-v{font-size:12.5px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;padding:2px 8px 0;line-height:1.5}
+.lseg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;margin-left:8px;max-width:calc(100% - 8px)}
+.lseg button{border:0;background:var(--surface);padding:4px 10px;font-size:12px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.lseg button+button{border-left:1px solid var(--line)}
+.lseg button:hover{color:var(--ink)}
+.lseg button.on{background:var(--navy-soft);color:var(--navy);font-weight:600}
+.lseg button.on.g{background:var(--g-bg);color:var(--g-ink)}
+.tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:5px;font-size:11.5px;font-weight:500;white-space:nowrap;background:var(--line-soft);color:var(--ink-2)}
+.pv>.tag{margin-left:8px}
+.slot-f{display:flex;align-items:center;gap:6px;padding:12px 16px;border-top:1px solid var(--line-soft);margin-top:auto}
+.slot-f .sp{flex:1}
+.btn.go{gap:5px}
+.btn.go .svg{width:13px;height:13px}
+
+/* peek panel */
+.peek-scrim{position:fixed;inset:0;background:var(--scrim);z-index:45}
+.peek{position:fixed;top:0;right:0;bottom:0;width:min(580px,100%);background:var(--surface);z-index:46;overflow-y:auto;box-shadow:-12px 0 40px rgba(0,0,0,.16);display:flex;flex-direction:column}
+.peek-top{position:sticky;top:0;background:var(--surface);display:flex;align-items:center;gap:8px;padding:10px 14px 10px 24px;border-bottom:1px solid var(--line-soft);z-index:1}
+.crumb{font-size:12px;color:var(--muted)}
+.x-btn{margin-left:auto;width:34px;height:34px;border:0;background:none;border-radius:8px;font-size:22px;color:var(--muted);cursor:pointer;line-height:1}
+.x-btn:hover{background:var(--bg);color:var(--ink)}
+.peek-h{display:flex;gap:14px;align-items:center;padding:22px 24px 6px}
+.ph-t{min-width:0;flex:1;display:flex;flex-direction:column}
+.peek-h h2{font-size:22px;font-weight:600;line-height:1.3}
+.peek-h .u{font-family:var(--mono);font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.peek-b{padding:6px 24px 36px;display:flex;flex-direction:column}
+.pk{padding:18px 0;border-top:1px solid var(--line-soft)}
+.pk:first-child{border-top:0}
+.pk>h3{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px}
+.pk .props{padding:0}
+.pk .exp-h{margin-bottom:10px}
+.pk .howbox{margin-top:0}
+.pk .exp-fields{grid-template-columns:1fr 1fr}
+.pk .memo{width:100%}
+.suffix{display:flex;align-items:center;gap:6px}
+.suffix .cell{flex:1}
+.pay-now{font-size:13px;color:var(--ink-2);min-height:34px;display:flex;align-items:center;gap:6px}
+.pk-del{padding-top:14px;border-top:1px solid var(--line-soft)}
+
+/* document page */
+.crumbs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.crumbs a{color:var(--muted)}
+.crumbs a:hover{color:var(--navy)}
+.pager a{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;text-align:left;display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;color:var(--ink);text-decoration:none!important}
+.pager a:hover{border-color:var(--navy)}
+.pager a.next{text-align:right}
+
+/* settings */
+.set-grid{display:flex;flex-direction:column;gap:16px;max-width:880px}
+.mg-row{display:grid;grid-template-columns:28px minmax(0,1fr) 190px auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line-soft)}
+.mg-row:first-child{border-top:0}
+.mg-row .no{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.mg-t{color:var(--ink);font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mg-row .inp{height:32px;font-size:13px}
+.mg-btns{display:flex;gap:4px}
+.mini:disabled{opacity:.35;cursor:default}
+.howto{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--ink-2)}
+.stale{margin-top:24px}
+
+@media (max-width:1100px){
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .page{padding:28px 28px 72px}
+}
+@media (max-width:960px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;left:0;top:0;bottom:0;width:280px;max-width:86vw;z-index:40;transform:translateX(-102%);transition:transform .2s ease;height:auto}
+  .app.nav-open .side{transform:none;box-shadow:12px 0 40px rgba(0,0,0,.18)}
+  .app.nav-open .side-scrim{display:block;position:fixed;inset:0;background:var(--scrim);z-index:39}
+  .mbar{display:flex;position:sticky;top:0;z-index:20;height:54px;align-items:center;gap:10px;padding:0 12px;padding-top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line)}
+  .mbrand{display:flex;align-items:baseline;gap:8px;color:var(--ink);text-decoration:none!important}
+  .mbrand b{font-size:12.5px;letter-spacing:.16em;color:var(--navy);font-weight:600}
+  .mbrand span{font-size:14px;font-weight:500}
+  .mbar .state{margin-left:auto}
+  .mbar .state span{display:none}
+  .menu-btn{width:38px;height:38px;border:1px solid var(--line);background:var(--surface);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer}
+  .menu-btn i{display:block;width:16px;height:1.5px;background:var(--ink);border-radius:1px}
+  .app.locked .mbar{display:none}
+  .page{padding:20px 16px 64px}
+  .split2{grid-template-columns:1fr}
+  .top-r{margin-left:0;width:100%}
+  .top-r .search{flex:1 1 auto;width:auto}
+}
+@media (max-width:600px){
+  .hero h1{font-size:26px}
+  .tiles{gap:8px}
+  .tile{padding:14px}
+  .tile .v{font-size:24px}
+  .acards{grid-template-columns:minmax(0,1fr)}
+  .pk .exp-fields{grid-template-columns:1fr}
+  .peek-h{padding:18px 16px 6px}
+  .peek-b{padding:6px 16px 32px}
+  .peek-top{padding-left:16px}
+  .mg-row{grid-template-columns:24px minmax(0,1fr) auto}
+  .mg-row .inp{grid-column:2/-1;grid-row:2}
+  .shortcuts{grid-template-columns:minmax(0,1fr)}
+}
 </style>
 </head>
 <body>
@@ -513,9 +734,9 @@ var S={
   phase:'lock',
   pass:null,key:null,salt:null,room:null,
   nodes:{},ivs:{},seq:0,
-  tab:'acc',view:'home',editing:null,homeEdit:false,armed:null,stale:false,
+  tab:'home',view:'home',editing:null,homeEdit:false,armed:null,stale:false,
   conn:null,pending:0,err:'',busy:false,last:Date.now(),
-  q:'',open:{},more:{},showPw:{},editHow:null,remember:true,toolsOpen:false,masterOpen:false,applying:false
+  q:'',lf:'',cf:'',peek:null,doc:null,navOpen:false,pendingEdit:null,open:{},more:{},showPw:{},editHow:null,remember:true,toolsOpen:false,masterOpen:false,applying:false
 };
 var db=null,nodesRef=null,connRef=null,authReady=null;
 
@@ -664,7 +885,7 @@ function subscribe(){
 function lockAll(){
   if(nodesRef){nodesRef.off();nodesRef=null}
   S.phase='lock';S.pass=null;S.key=null;S.salt=null;S.room=null;S.nodes={};S.ivs={};
-  S.editing=null;S.homeEdit=false;S.open={};S.showPw={};S.editHow=null;S.err='';S.stale=false;S.busy=false;
+  S.editing=null;S.homeEdit=false;S.open={};S.showPw={};S.editHow=null;S.peek=null;S.navOpen=false;S.err='';S.stale=false;S.busy=false;
   render();
 }
 function changeMaster(newPass){
@@ -762,11 +983,25 @@ function maybeApplyUpdate(){
     return crypto.subtle.decrypt({name:'AES-GCM',iv:fromB64(U.iv)},k,fromB64(U.ct));
   }).then(function(pt){
     var data=JSON.parse(td.decode(pt));
+    if(data._after&&done.indexOf(data._after.id)>=0){data=data._after.data;data.accounts=(data.accounts||[]).filter(function(a){return findAcc(a.id)})}
+    delete data._after;
     return mergeData(data).then(function(){
       var m=Object.assign({},meta());m.applied=(m.applied||[]).concat([U.id]);return put('doc-meta',m);
     });
   }).then(function(){UPDATE_KEY=null;S.applying=false;render();toast('업데이트를 적용했습니다. 로그인 방법과 결제 정보가 채워졌습니다.')},
     function(e){console.error(e);UPDATE_KEY=null;S.applying=false;toast('업데이트 링크가 올바르지 않습니다.')});
+}
+
+/* ================= one-time fill: login page addresses ================= */
+var URL_FILL={a03:'https://shopping-sell.kakao.com',a04:'https://shopping-seller.toss.im',a06:'https://store.lotteon.com',a08:'https://po.ssgadm.com',a09:'https://partner.musinsa.com',a10:'https://www.sabangnet.co.kr',a11:'https://omoplay.com',a15:'https://brandconnect.naver.com',a17:'https://app.keepgrow.com',a25:'https://clovanote.naver.com',a34:'https://cnecbiz.com',a35:'https://www.brandazine.com'};
+function maybeMigrate(){
+  if(S.phase!=='ready'||S.migrating)return;
+  var filled=meta().urlFilled||[],ids=Object.keys(URL_FILL).filter(function(id){return filled.indexOf(id)<0&&findAcc(id)});
+  if(!ids.length)return;
+  S.migrating=true;var jobs=[];
+  ids.forEach(function(id){var a=findAcc(id);if(!a.url){var o=Object.assign({},a);o.url=URL_FILL[id];jobs.push(put('acc_'+id,o))}});
+  var mm=Object.assign({},meta());mm.urlFilled=filled.concat(ids);jobs.push(put('doc-meta',mm));
+  Promise.all(jobs).then(function(){S.migrating=false;liveRender()},function(){S.migrating=false});
 }
 
 /* ================= merge (import / update) ================= */
@@ -808,37 +1043,112 @@ function nextPay(r){
 }
 function payLabel(r){if(!r.cycle)return '';return (r.cycle==='y'?'매년 '+(num(r.paymonth)||'?')+'월 ':'매월 ')+(num(r.payday)?num(r.payday)+'일':'결제일 미입력')}
 
-/* ================= shell ================= */
+/* ================= shell & routing ================= */
 var CATS=['판매 채널','연동·물류','광고','SNS·고객 채널','콘텐츠·디자인','AI·개발·협업','업무·협업','사무실·기타'];
-var TABS=[['acc','계정'],['pay','결제'],['todo','할 일'],['doc','인수인계 내용']];
+var DOC_GROUPS=['팀과 업무','브랜드·콘텐츠','채널·운영','툴·노하우'];
+var DOC_DEFAULT={'사람과 역할':'팀과 업무','업무 현황':'팀과 업무','작업 방식':'팀과 업무','브랜드와 제품':'브랜드·콘텐츠','카피와 표현 지침':'브랜드·콘텐츠','캠페인 기록':'브랜드·콘텐츠','채널과 광고':'채널·운영','자사몰 리뉴얼':'채널·운영','대시보드와 웹페이지':'채널·운영','툴과 제작 노하우':'툴·노하우'};
+function docGroup(s){return (s&&s.group)||DOC_DEFAULT[s&&s.title]||'기타'}
+function docGroups(){return uniq(DOC_GROUPS.concat(sections().map(docGroup)))}
+function menuDocs(){var ss=sections(),o=[];docGroups().forEach(function(g){ss.forEach(function(s){if(docGroup(s)===g)o.push(s)})});return o}
+var SSO={google:'미라클 구글',naver:'네이버 로그인',kakao:'카카오 로그인'};
+function googleId(){var g=findAcc('a31');return (g&&g.login)||''}
+var ICONS={
+  home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/>',
+  card:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',
+  check:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="m8 12 3 3 5-6"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  ext:'<path d="M7 17 17 7M9 7h8v8"/>',
+  doc:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>'
+};
+function ic(n,c){return '<svg class="svg'+(c?' '+c:'')+'" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[n]+'</svg>'}
+var ROUTES=['home','acc','pay','todo','settings'];
+function parseRoute(){
+  var h=(location.hash||'').replace(/^#\/?/,'');
+  var p=h.split('/');
+  if(p[0]==='doc'&&p[1])return {tab:'doc',id:decodeURIComponent(p[1])};
+  return {tab:ROUTES.indexOf(p[0])>=0?p[0]:'home'};
+}
+function applyRoute(){
+  var r=parseRoute();
+  S.tab=r.tab;S.doc=r.id||null;S.editing=S.pendingEdit||null;S.pendingEdit=null;S.homeEdit=false;S.armed=null;S.peek=null;S.editHow=null;S.navOpen=false;
+}
+function go(route){
+  var h='#/'+route;
+  if(location.hash===h){applyRoute();render();window.scrollTo(0,0)}
+  else location.hash=h;
+}
+window.addEventListener('hashchange',function(){applyRoute();render();window.scrollTo(0,0)});
+
 var app=$('#app');
 function renderShell(){
-  app.innerHTML='<header class="bar"><div class="bar-in">'
-    +'<div class="brand"><b>LIFEMEAL</b><span>인수인계</span>'+(TEST?'<span class="env-test">TEST</span>':'')+'</div>'
-    +'<nav class="tabs" id="tabs" aria-label="메뉴"></nav>'
-    +'<div class="bar-r"><div class="state" id="state"></div><button class="btn ghost sm" id="lockBtn" data-act="lock" hidden>잠금</button></div>'
-    +'</div></header><main class="wrap" id="body"></main>';
+  app.innerHTML='<div class="app locked" id="shell">'
+    +'<aside class="side" id="side" aria-label="메뉴"></aside>'
+    +'<div class="side-scrim" data-act="nav-close"></div>'
+    +'<div class="col">'
+    +'<header class="mbar"><button class="menu-btn" data-act="nav-open" aria-label="메뉴 열기"><i></i><i></i><i></i></button>'
+    +'<a class="mbrand" href="#/home"><b>LIFEMEAL</b><span>인수인계</span></a>'+(TEST?'<span class="env-test">TEST</span>':'')
+    +'<div class="state" id="state-m"></div></header>'
+    +'<main class="page" id="body"></main></div></div>';
+}
+function mi(route,label,icon,n,cls){
+  var on=(route==='doc/'+S.doc&&S.tab==='doc')||route===S.tab;
+  return '<a class="mi'+(cls?' '+cls:'')+(on?' on':'')+'" href="#/'+route+'"'+(on?' aria-current="page"':'')+'>'+(icon?ic(icon):'')+'<span class="t">'+esc(label)+'</span>'+(n!=null&&n!==''?'<span class="n">'+n+'</span>':'')+'</a>';
+}
+function sideHTML(){
+  var all=accounts(),tasks=list('tasks'),openT=tasks.filter(function(t){return !t.done}).length,secs=sections();
+  var h='<a class="side-brand" href="#/home"><span class="eyebrow">LIFEMEAL</span><b>업무 인수인계</b>'+(TEST?'<span class="env-test">TEST</span>':'')+'</a>'
+    +'<nav class="menu">'
+    +mi('home','홈','home')
+    +'<p class="menu-h">계정 · 결제</p>'
+    +mi('acc','계정','key',all.length)
+    +mi('pay','정기 결제','card',bills().length||'')
+    +'<p class="menu-h">업무</p>'
+    +mi('todo','할 일','check',openT||'')
+    +'<p class="menu-h">인수인계 문서</p>';
+  docGroups().forEach(function(g){
+    var ss=secs.filter(function(s){return docGroup(s)===g});if(!ss.length)return;
+    h+='<p class="menu-sub">'+esc(g)+'</p>'+ss.map(function(s){return mi('doc/'+encodeURIComponent(s.id),s.title||'(제목 없음)','', '', 'doc')}).join('');
+  });
+  h+='<button class="menu-add" data-act="sec-new">+ 문서 추가</button></nav>'
+    +'<div class="side-foot"><div class="state" id="state"></div><span class="sp"></span>'
+    +'<a class="lk'+(S.tab==='settings'?' on':'')+'" href="#/settings" title="설정">'+ic('gear')+'<span>설정</span></a>'
+    +'<button class="lk" data-act="lock" title="잠금">'+ic('lock')+'<span>잠금</span></button></div>';
+  return h;
+}
+function stateHTML(){
+  if(S.conn===false)return ['state off','<i></i><span>연결 끊김</span>'];
+  if(S.pending>0)return ['state busy','<i></i><span>저장 중</span>'];
+  return ['state live','<i></i><span>자동 저장됨</span>'];
 }
 function updateBar(){
-  var st=$('#state'),lb=$('#lockBtn'),tb=$('#tabs');if(!st)return;
-  var ready=S.phase==='ready';lb.hidden=!ready;
-  tb.innerHTML=ready?TABS.map(function(t){return '<button class="tab'+(S.tab===t[0]?' on':'')+'" data-act="tab" data-tab="'+t[0]+'">'+t[1]+'</button>'}).join(''):'';
-  if(!ready){st.className='state';st.innerHTML='';return}
-  if(S.conn===false){st.className='state off';st.innerHTML='<i></i><span>연결 끊김</span>';return}
-  if(S.pending>0){st.className='state busy';st.innerHTML='<i></i><span>저장 중</span>';return}
-  st.className='state live';st.innerHTML='<i></i><span>자동 저장됨</span>';
+  var sh=$('#shell');if(!sh)return;
+  var ready=S.phase==='ready';
+  sh.classList.toggle('locked',!ready);
+  sh.classList.toggle('nav-open',!!S.navOpen&&ready);
+  var side=$('#side');
+  if(!ready){if(side)side.innerHTML='';var m0=$('#state-m');if(m0){m0.className='state';m0.innerHTML=''}return}
+  if(side&&!side.contains(document.activeElement))side.innerHTML=sideHTML();
+  var st=stateHTML();
+  ['#state','#state-m'].forEach(function(s){var e=$(s);if(e){e.className=st[0];e.innerHTML=st[1]}});
 }
 function render(){
   updateBar();
   var b=$('#body');if(!b)return;
-  if(S.phase!=='ready'){b.innerHTML=gateHTML();var f=$('#g-pass')||$('#c-pass');if(f&&!S.busy)f.focus();return}
-  var h='';
+  if(S.phase!=='ready'){b.innerHTML=gateHTML();document.body.classList.remove('noscroll');var f=$('#g-pass')||$('#c-pass');if(f&&!S.busy)f.focus();return}
+  var h;
   if(S.tab==='acc')h=accHTML();
   else if(S.tab==='pay')h=payHTML();
   else if(S.tab==='todo')h=todoHTML();
-  else h=docHTML();
-  b.innerHTML=h+'<p class="stale" id="stale"'+(S.stale?'':' hidden')+'>다른 사람이 바꾼 내용이 있습니다. 입력을 마치면 최신 내용으로 다시 표시됩니다.</p>'+toolsHTML();
+  else if(S.tab==='settings')h=settingsHTML();
+  else if(S.tab==='doc'&&S.doc&&secById(S.doc))h=secHTML(S.doc);
+  else h=homeHTML();
+  var pr=S.peek?findAcc(S.peek):null;if(S.peek&&!pr)S.peek=null;
+  b.innerHTML=h+'<p class="stale" id="stale"'+(S.stale?'':' hidden')+'>다른 사람이 바꾼 내용이 있습니다. 입력을 마치면 최신 내용으로 다시 표시됩니다.</p>'+(pr?peekHTML(pr):'');
+  document.body.classList.toggle('noscroll',!!pr||!!S.navOpen);
   maybeApplyUpdate();
+  maybeMigrate();
 }
 function isBusyEditing(){
   if(S.editing||S.homeEdit)return true;
@@ -851,8 +1161,243 @@ function liveRender(){
   if(isBusyEditing()){S.stale=true;var n=$('#stale');if(n)n.hidden=false;return}
   S.stale=false;render();
 }
-function setTab(t){S.tab=t;S.view='home';S.editing=null;S.homeEdit=false;S.armed=null;render();window.scrollTo(0,0)}
+function setNav(open){S.navOpen=open;var sh=$('#shell');if(sh)sh.classList.toggle('nav-open',open);document.body.classList.toggle('noscroll',open||!!S.peek)}
+function closePeek(){var a=document.activeElement;if(a&&a.blur)a.blur();S.peek=null;S.editHow=null;S.armed=null;render()}
 
+/* ================= shared bits ================= */
+function bills(){return accounts().filter(function(a){return a.cycle||num(a.payday)||num(a.amount)})}
+function ddHTML(n){return n?'<span class="dd'+(n.days<=3?' soon':'')+'">'+(n.days===0?'오늘':'D-'+n.days)+'</span>':'<span class="dd none">미입력</span>'}
+function initial(s){s=String(s||'').replace(/[^0-9A-Za-z가-힣]/g,'');return esc((s.charAt(0)||'·').toUpperCase())}
+function cell(r,f,ph,cls,type){return '<input class="cell box'+(cls?' '+cls:'')+'" data-id="'+esc(r.id)+'" data-f="'+f+'"'+(type?' type="'+type+'"':'')+' value="'+esc(f==='amount'?comma(r[f]):(r[f]||''))+'" placeholder="'+esc(ph||'')+'" aria-label="'+esc(r.name)+' '+f+'" autocomplete="off">'}
+function extBtn(href,label,cls){return '<a class="btn primary sm go'+(cls?' '+cls:'')+'" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(label||'바로가기')+ic('ext')+'</a>'}
+
+/* ================= home ================= */
+function homeHTML(){
+  var d=meta(),facts=list('facts'),links=list('links'),secs=sections(),all=accounts(),tasks=list('tasks');
+  var gN=all.filter(function(a){return a.sso==='google'}).length,noPw=all.filter(function(a){return !a.pw&&!a.sso}).length;
+  var openT=[];tasks.forEach(function(t,i){if(!t.done)openT.push({t:t,i:i})});
+  var bs=bills(),mSum=bs.filter(function(r){return r.cycle!=='y'}).reduce(function(s,r){return s+num(r.amount)},0);
+  var up=bs.map(function(r){return {r:r,n:nextPay(r)}}).filter(function(x){return x.n}).sort(function(a,b){return a.n.days-b.n.days});
+  var sub=[d.basis?d.basis+' 기준':'',d.author?'작성 '+d.author:''].filter(Boolean).map(esc).join(' · ');
+  var h='<section class="hero"><div><p class="eyebrow">LIFEMEAL · 업무 인수인계</p><h1>'+esc(d.title||'라이프밀 업무 인수인계')+'</h1>'+(sub?'<p class="sub">'+sub+'</p>':'')+'</div>'
+    +(S.homeEdit?'':'<div class="hero-r"><button class="btn" data-act="home-edit">홈 편집</button></div>')+'</section>';
+  h+='<div class="handover">'
+    +'<div class="field"><label for="m-author">작성자</label><input class="inp" id="m-author" data-meta="author" value="'+esc(d.author)+'"></div>'
+    +'<div class="field"><label for="m-succ">인수자</label><input class="inp" id="m-succ" data-meta="successor" placeholder="이름과 직함" value="'+esc(d.successor)+'"></div>'
+    +'<div class="field"><label for="m-date">인계일</label><input class="inp" id="m-date" type="date" data-meta="handoverDate" value="'+esc(d.handoverDate)+'"></div></div>';
+  if(S.homeEdit){
+    return h+'<div class="editor">'
+      +'<div class="field"><label for="he-title">홈 제목</label><input class="inp" id="he-title" value="'+esc(d.title)+'"></div>'
+      +'<div class="field"><label for="he-basis">기준일</label><input class="inp" id="he-basis" value="'+esc(d.basis)+'"></div>'
+      +'<div class="field"><label for="he-links">바로가기 사이트</label><textarea class="inp" id="he-links" rows="10">'+esc(links.map(function(l){return l.label+' | '+l.url}).join('\n'))+'</textarea><span class="hint">한 줄에 하나씩: 이름 | 주소. 위에서부터 순서대로 홈에 표시됩니다.</span></div>'
+      +'<div class="field"><label for="he-facts">핵심 숫자</label><textarea class="inp" id="he-facts" rows="5">'+esc(facts.map(function(f){return [f.label,f.value,f.note].join(' | ')}).join('\n'))+'</textarea><span class="hint">한 줄에 하나씩: 이름 | 값 | 설명</span></div>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap"><span style="flex:1"></span><button class="btn ghost" data-act="home-cancel">취소</button><button class="btn primary" data-act="home-done">적용</button></div></div>';
+  }
+  var nx=up[0];
+  h+='<div class="tiles">'
+    +'<a class="tile" href="#/acc"><span class="l">'+ic('key')+'계정</span><span class="v">'+all.length+'<small>개</small></span><span class="s">'+(gN?'<span class="g">미라클 구글 '+gN+'</span>':'')+(noPw?'<span class="w">비밀번호 미입력 '+noPw+'</span>':'<span>모두 입력됨</span>')+'</span></a>'
+    +'<a class="tile" href="#/pay"><span class="l">'+ic('card')+'매월 정기 결제</span><span class="v">'+(mSum?comma(mSum)+'<small>원</small>':bs.length+'<small>건</small>')+'</span><span class="s">'+(nx?'<span>다음 '+esc(nx.r.name)+' '+nx.n.label+'</span>':'<span>결제일 입력 전</span>')+'</span></a>'
+    +'<a class="tile" href="#/todo"><span class="l">'+ic('check')+'남은 할 일</span><span class="v">'+openT.length+'<small>개</small></span><span class="s"><span>전체 '+tasks.length+'개</span></span></a>'
+    +'<button class="tile" data-act="scroll-docs"><span class="l">'+ic('doc')+'인수인계 문서</span><span class="v">'+secs.length+'<small>개</small></span><span class="s"><span>'+docGroups().filter(function(g){return secs.some(function(s){return docGroup(s)===g})}).length+'개 분류</span></span></button>'
+    +'</div>';
+  if(links.length)h+='<section class="blk"><div class="blk-h"><h2>바로가기</h2><span class="c">자주 쓰는 사이트</span><button class="linkbtn r" data-act="home-edit">바로가기 편집</button></div><div class="shortcuts">'
+    +links.map(function(l){var href=hrefOf(l.url);return href?'<a class="sc" href="'+esc(href)+'" target="_blank" rel="noopener"><span class="ico">'+initial(l.label)+'</span><span class="sc-t"><b>'+esc(l.label)+'</b><small>'+esc(shortUrl(l.url))+'</small></span>'+ic('ext','sc-x')+'</a>':'<span class="sc off"><span class="ico">'+initial(l.label)+'</span><span class="sc-t"><b>'+esc(l.label)+'</b><small>주소 없음</small></span></span>'}).join('')+'</div></section>';
+  h+='<div class="split2">'
+    +'<section class="panel"><div class="panel-h"><h2>먼저 할 일</h2><span class="c">'+openT.length+'개 남음</span><a class="r more" href="#/todo">전체 보기</a></div>'
+    +(openT.length?'<ul class="hl">'+openT.slice(0,6).map(function(x){return '<li><input type="checkbox" data-task="'+x.i+'" aria-label="완료 표시"><span class="area">'+esc(x.t.area||'기타')+'</span><span class="t">'+rich(x.t.text)+'</span></li>'}).join('')+'</ul>':'<p class="hint">남은 일이 없습니다.</p>')+'</section>'
+    +'<section class="panel"><div class="panel-h"><h2>다가오는 결제</h2><span class="c">'+up.length+'건</span><a class="r more" href="#/pay">전체 보기</a></div>'
+    +(up.length?'<ul class="hl pay">'+up.slice(0,6).map(function(x){return '<li class="clk" data-act="peek" data-id="'+esc(x.r.id)+'"><span class="d mono">'+x.n.label+'</span>'+ddHTML(x.n)+'<span class="t">'+esc(x.r.name)+'</span><span class="a mono">'+(num(x.r.amount)?comma(x.r.amount)+'원':'')+'</span></li>'}).join('')+'</ul>':'<p class="hint">계정의 자세히에서 결제일을 넣으면 여기에 표시됩니다.</p>')+'</section>'
+    +'</div>';
+  if(facts.length)h+='<section class="blk"><div class="blk-h"><h2>핵심 숫자</h2></div><div class="facts">'+facts.map(function(f){return '<div class="fact"><span class="l">'+esc(f.label)+'</span><span class="v">'+esc(f.value)+'</span><span class="n">'+esc(f.note||'')+'</span></div>'}).join('')+'</div></section>';
+  h+='<section class="blk" id="docs"><div class="blk-h"><h2>인수인계 문서</h2><span class="c">'+secs.length+'개</span><button class="btn sm r" data-act="sec-new">문서 추가</button></div>';
+  docGroups().forEach(function(g){
+    var ss=secs.filter(function(s){return docGroup(s)===g});if(!ss.length)return;
+    h+='<div class="dgroup"><h3 class="dg-h">'+esc(g)+'</h3><div class="toc">'+ss.map(function(s){var n=countItems(s);return '<a class="card" href="#/doc/'+encodeURIComponent(s.id)+'"><h3>'+esc(s.title)+'</h3><p>'+esc(s.lede)+'</p><span class="meta">'+(s.groups||[]).length+'개 묶음 · '+n+'개 항목</span></a>'}).join('')+'</div></div>';
+  });
+  return h+'</section>';
+}
+
+/* ================= accounts ================= */
+function accHTML(){
+  var all=accounts(),q=S.q.trim().toLowerCase(),lf=S.lf||'',cf=S.cf||'';
+  var base=all.filter(function(x){return !q||[x.name,x.cat,x.login,x.note,x.owner,x.url,SSO[x.sso]||''].join(' ').toLowerCase().indexOf(q)>=0});
+  var byLogin=base.filter(function(x){return !lf||(lf==='google'?x.sso==='google':x.sso!=='google')});
+  var rows=byLogin.filter(function(x){return !cf||(x.cat||'사무실·기타')===cf});
+  var gN=base.filter(function(a){return a.sso==='google'}).length,noPw=all.filter(function(a){return !a.pw&&!a.sso}).length;
+  var h='<div class="top"><div><h1 class="ttl">계정</h1><p class="sub">사이트 바로가기와 로그인 정보입니다. 칸에 입력하면 바로 저장되고, 결제일·금액·메모는 자세히에서 고칩니다.</p></div>'
+    +'<div class="top-r"><input class="inp search" id="q" type="search" placeholder="서비스, 아이디, 메모 검색" value="'+esc(S.q)+'"><button class="btn primary" data-act="acc-add">계정 추가</button></div></div>';
+  h+='<div class="filters"><div class="seg" role="group" aria-label="로그인 방식">'
+    +[['','전체',base.length],['google','미라클 구글 로그인',gN],['id','아이디 로그인',base.length-gN]].map(function(o){return '<button class="'+(lf===o[0]?'on':'')+(o[0]==='google'?' g':'')+'" data-act="lf" data-v="'+o[0]+'"'+(lf===o[0]?' aria-pressed="true"':'')+'>'+o[1]+'<span class="n">'+o[2]+'</span></button>'}).join('')+'</div>'
+    +(noPw?'<span class="warn-t">비밀번호 미입력 '+noPw+'개</span>':'')+'</div>';
+  var cats=uniq(CATS.concat(all.map(function(r){return r.cat||'사무실·기타'})));
+  h+='<div class="chips"><button class="chip'+(!cf?' on':'')+'" data-act="cf" data-v="">전체 분류</button>'
+    +cats.map(function(c){var n=byLogin.filter(function(r){return (r.cat||'사무실·기타')===c}).length;return n||cf===c?'<button class="chip'+(cf===c?' on':'')+'" data-act="cf" data-v="'+esc(c)+'">'+esc(c)+' <span>'+n+'</span></button>':''}).join('')+'</div>';
+  cats.forEach(function(c){
+    var rs=rows.filter(function(r){return (r.cat||'사무실·기타')===c});if(!rs.length)return;
+    h+='<section class="acat"><h2 class="acat-h">'+esc(c)+'<span>'+rs.length+'</span></h2><div class="acards">'+rs.map(slotHTML).join('')+'</div></section>';
+  });
+  if(!rows.length)h+='<p class="hint" style="margin-top:24px">조건에 맞는 계정이 없습니다.</p>';
+  return h;
+}
+function loginSeg(r){
+  var g=r.sso==='google';
+  if(r.sso&&!g)return '<span class="tag sso-'+esc(r.sso)+'">'+esc(SSO[r.sso]||r.sso)+'</span>';
+  return '<div class="lseg" role="group" aria-label="로그인 방식"><button class="'+(g?'on g':'')+'" data-act="sso-set" data-id="'+esc(r.id)+'" data-v="google">미라클 구글</button><button class="'+(g?'':'on')+'" data-act="sso-set" data-id="'+esc(r.id)+'" data-v="">아이디 · 비번</button></div>';
+}
+function credProps(r){
+  var g=r.sso==='google',other=r.sso&&!g,show=!!S.showPw[r.id];
+  return '<div class="prop"><span class="pl">로그인</span><div class="pv">'+loginSeg(r)+'</div></div>'
+    +'<div class="prop"><span class="pl">아이디</span><div class="pv">'+(g
+      ?'<div class="ro-v"><span class="mono ell">'+esc(googleId()||'미라클 구글 계정')+'</span><button class="mini" data-act="id-copy" data-id="'+esc(r.id)+'">복사</button></div>'
+      :'<div class="pwbox">'+cell(r,'login',other?'연결된 계정 아이디':'아이디 입력','mono')+'<button class="mini" data-act="id-copy" data-id="'+esc(r.id)+'">복사</button></div>')+'</div></div>'
+    +'<div class="prop"><span class="pl">비밀번호</span><div class="pv">'+(r.sso
+      ?'<span class="pw-sso">'+(g?'구글 계정 비밀번호로 로그인':'연결된 계정으로 로그인')+'</span>'
+      :'<div class="pwbox">'+cell(r,'pw','비밀번호 입력','mono',show?'text':'password')+'<button class="mini" data-act="pw-eye" data-id="'+esc(r.id)+'">'+(show?'숨김':'보기')+'</button><button class="mini" data-act="pw-copy" data-id="'+esc(r.id)+'">복사</button></div>')+'</div></div>';
+}
+function slotHTML(r){
+  var href=hrefOf(r.url),g=r.sso==='google';
+  return '<article class="slot'+(g?' is-g':'')+'">'
+    +'<div class="slot-h"><span class="ico'+(g?' g':'')+'" aria-hidden="true">'+initial(r.name)+'</span><div class="slot-t"><h3><button class="tbtn" data-act="peek" data-id="'+esc(r.id)+'">'+esc(r.name||'(이름 없음)')+'</button></h3>'
+    +(href?'<a class="slot-u" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(shortUrl(r.url))+'</a>':'<span class="slot-u none">주소 없음</span>')+'</div>'
+    +(g?'<span class="gbadge" title="미라클 구글 로그인">G</span>':'')+'</div>'
+    +'<div class="props">'+credProps(r)
+    +(r.note?'<div class="prop top"><span class="pl">메모</span><div class="pv note-v">'+esc(r.note)+'</div></div>':'')+'</div>'
+    +'<div class="slot-f">'+(href?extBtn(href,'바로가기'):'<button class="btn sm" data-act="peek" data-id="'+esc(r.id)+'">주소 입력</button>')
+    +'<span class="sp"></span>'+(r.cycle?'<span class="tag">'+(r.cycle==='y'?'연 결제':'월 결제')+'</span>':'')
+    +'<button class="btn sm ghost" data-act="peek" data-id="'+esc(r.id)+'">자세히</button></div>'
+    +'</article>';
+}
+function peekHTML(r){
+  var href=hrefOf(r.url),np=nextPay(r),armed=S.armed==='del:'+r.id,g=r.sso==='google';
+  return '<div class="peek-scrim" data-act="peek-close"></div><aside class="peek" role="dialog" aria-modal="true" aria-label="'+esc(r.name)+' 자세히">'
+    +'<div class="peek-top"><span class="crumb">계정 / '+esc(r.cat||'사무실·기타')+'</span><button class="x-btn" data-act="peek-close" aria-label="닫기">×</button></div>'
+    +'<div class="peek-h"><span class="ico lg'+(g?' g':'')+'" aria-hidden="true">'+initial(r.name)+'</span><div class="ph-t"><h2>'+esc(r.name||'(이름 없음)')+'</h2>'+(href?'<a class="u" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(shortUrl(r.url))+'</a>':'<span class="u">주소를 아래 기본 정보에 넣어 주세요</span>')+'</div>'+(href?extBtn(href,'바로가기'):'')+'</div>'
+    +'<div class="peek-b">'
+    +'<section class="pk"><h3>로그인</h3><div class="props">'+credProps(r)
+    +'<div class="prop"><span class="pl">2차 인증</span><div class="pv">'+cell(r,'mfa','받는 휴대폰 등')+'</div></div></div></section>'
+    +'<section class="pk">'+howHTML(r)+'</section>'
+    +'<section class="pk"><h3>결제</h3><div class="exp-fields">'
+    +'<div class="f"><label>결제 주기</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="cycle"><option value="">없음</option><option value="m"'+(r.cycle==='m'?' selected':'')+'>매월</option><option value="y"'+(r.cycle==='y'?' selected':'')+'>매년</option></select></div>'
+    +(r.cycle==='y'?'<div class="f"><label>결제 월</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="paymonth"><option value="">선택</option>'+[1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){return '<option value="'+m+'"'+(String(r.paymonth)===String(m)?' selected':'')+'>'+m+'월</option>'}).join('')+'</select></div>':'')
+    +'<div class="f"><label>결제일</label><div class="suffix">'+cell(r,'payday','예: 15','num')+'<span class="unit">일</span></div></div>'
+    +'<div class="f"><label>금액</label><div class="suffix">'+cell(r,'amount','0','num')+'<span class="unit">원</span></div></div>'
+    +fld(r,'paymethod','결제 수단 (카드 끝 4자리)')
+    +'<div class="f"><label>다음 결제</label><div class="pay-now">'+(np?np.label+' '+ddHTML(np):'<span class="muted">결제일을 넣으면 계산됩니다</span>')+'</div></div>'
+    +'</div></section>'
+    +'<section class="pk"><h3>메모</h3><textarea class="cell box memo" data-id="'+esc(r.id)+'" data-f="note" rows="3" placeholder="담당자, 주의할 점 등" aria-label="'+esc(r.name)+' 메모">'+esc(r.note||'')+'</textarea></section>'
+    +'<section class="pk"><h3>기본 정보</h3><div class="exp-fields">'
+    +fld(r,'name','서비스 이름')+fldCat(r)+fld(r,'url','접속 주소')+fld(r,'owner','명의 · 담당자')
+    +'<div class="f"><label>로그인 방식</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="sso"><option value="">아이디 · 비밀번호</option><option value="google"'+(g?' selected':'')+'>미라클 구글 로그인</option><option value="naver"'+(r.sso==='naver'?' selected':'')+'>네이버 아이디 로그인</option><option value="kakao"'+(r.sso==='kakao'?' selected':'')+'>카카오 계정 로그인</option></select></div>'
+    +'</div></section>'
+    +'<div class="pk-del"><button class="btn sm danger'+(armed?' armed':'')+'" data-act="acc-del" data-id="'+esc(r.id)+'">'+(armed?'한 번 더 누르면 삭제':'이 계정 삭제')+'</button></div>'
+    +'</div></aside>';
+}
+
+/* ================= payments ================= */
+function payHTML(){
+  var bs=bills();
+  var rows=bs.map(function(r){return {r:r,n:nextPay(r)}}).sort(function(a,b){return (a.n?a.n.days:99999)-(b.n?b.n.days:99999)});
+  var mSum=bs.filter(function(r){return r.cycle!=='y'}).reduce(function(s,r){return s+num(r.amount)},0);
+  var ySum=bs.filter(function(r){return r.cycle==='y'}).reduce(function(s,r){return s+num(r.amount)},0);
+  var miss=bs.filter(function(r){return !num(r.payday)||!num(r.amount)}).length;
+  var h='<div class="top"><div><h1 class="ttl">정기 결제</h1><p class="sub">결제일이 가까운 순서입니다. 서비스 이름을 누르면 결제일과 금액을 고칠 수 있습니다.</p></div></div>'
+    +'<div class="sumrow"><div class="sum"><span>매월 나가는 돈</span><b>'+(mSum?mSum.toLocaleString('ko-KR'):'0')+'원</b></div>'
+    +(ySum?'<div class="sum"><span>연 결제</span><b>'+ySum.toLocaleString('ko-KR')+'원</b></div>':'')
+    +'<div class="sum"><span>정기 결제</span><b>'+bs.length+'건</b></div>'
+    +(miss?'<div class="sum warn"><span>금액·결제일 미입력</span><b>'+miss+'건</b></div>':'')+'</div>';
+  if(!rows.length)return h+'<p class="hint">계정의 자세히에서 결제일을 넣으면 여기에 표시됩니다.</p>';
+  h+='<div class="tbl-wrap"><table class="tbl paytbl"><thead><tr><th>다음 결제</th><th></th><th>서비스</th><th>주기</th><th class="r">금액</th><th>결제 수단 · 메모</th></tr></thead><tbody>';
+  rows.forEach(function(x){
+    var r=x.r,n=x.n;
+    h+='<tr><td class="mono">'+(n?n.label:'—')+'</td><td>'+ddHTML(n)+'</td>'
+      +'<td><button class="linkbtn strong" data-act="peek" data-id="'+esc(r.id)+'">'+esc(r.name)+'</button></td><td>'+esc(payLabel(r)||'매월')+'</td>'
+      +'<td class="r mono">'+(num(r.amount)?comma(r.amount)+'원':'<span class="muted">미입력</span>')+'</td><td class="muted">'+esc([r.paymethod,r.note].filter(Boolean).join(' · '))+'</td></tr>';
+  });
+  return h+'</tbody></table></div>';
+}
+
+/* ================= todo ================= */
+function todoHTML(){
+  var tasks=list('tasks'),open=tasks.filter(function(t){return !t.done}).length;
+  var h='<div class="top"><div><h1 class="ttl">할 일</h1><p class="sub">남은 일 '+open+'개 / 전체 '+tasks.length+'개</p></div></div><section class="panel"><ul class="tasks">';
+  tasks.forEach(function(t,i){
+    h+='<li class="task'+(t.done?' done':'')+'"><input type="checkbox" id="tk'+i+'" data-task="'+i+'" '+(t.done?'checked':'')+' aria-label="완료 표시">'
+      +'<span class="area">'+esc(t.area||'기타')+'</span><label class="t" for="tk'+i+'">'+rich(t.text)+'</label>'
+      +'<button class="x" data-act="task-del" data-i="'+i+'" aria-label="삭제" title="삭제">×</button></li>';
+  });
+  if(!tasks.length)h+='<li class="hint">아직 할 일이 없습니다.</li>';
+  return h+'</ul><form class="task-add" data-form="task-add"><input class="inp" id="ta-area" placeholder="영역" list="area-list"><input class="inp" id="ta-text" placeholder="할 일 추가"><button class="btn" type="submit">추가</button>'
+    +'<datalist id="area-list">'+uniq(tasks.map(function(t){return t.area})).map(function(a){return '<option value="'+esc(a)+'">'}).join('')+'</datalist></form></section>';
+}
+
+/* ================= document page ================= */
+function secHTML(id){
+  var s=secById(id),secs=menuDocs(),i=secs.indexOf(s),g=docGroup(s);
+  var h='<nav class="crumbs" aria-label="위치"><a href="#/home">홈</a><span>/</span><span>인수인계 문서</span><span>/</span><span>'+esc(g)+'</span></nav>'
+    +'<section class="sec-head"><div><h1>'+esc(s.title)+'</h1><p class="lede">'+esc(s.lede)+'</p></div>'
+    +(S.editing===id?'':'<div class="r"><button class="btn" data-act="sec-edit">편집</button></div>')+'</section>';
+  if(S.editing===id){
+    h+='<div class="editor"><div class="field"><label for="se-title">제목</label><input class="inp" id="se-title" value="'+esc(s.title)+'"></div>'
+      +'<div class="field"><label for="se-group">메뉴 분류</label><input class="inp" id="se-group" list="grp-list" value="'+esc(g)+'"><datalist id="grp-list">'+docGroups().map(function(x){return '<option value="'+esc(x)+'">'}).join('')+'</datalist><span class="hint">왼쪽 메뉴에서 이 분류 아래에 표시됩니다. 새 이름을 적으면 분류가 새로 생깁니다.</span></div>'
+      +'<div class="field"><label for="se-lede">요약 한 줄</label><textarea class="inp" id="se-lede" rows="2">'+esc(s.lede)+'</textarea></div>';
+    (s.groups||[]).forEach(function(gr,gi){
+      var armed=S.armed==='g'+gi;
+      h+='<div class="edit-group"><div class="row"><input class="inp" data-gh="'+gi+'" value="'+esc(gr.h)+'" placeholder="묶음 제목">'
+        +'<button class="btn sm danger'+(armed?' armed':'')+'" data-act="grp-del" data-g="'+gi+'">'+(armed?'한 번 더 누르면 삭제':'삭제')+'</button></div>'
+        +'<textarea class="inp" data-gi="'+gi+'" rows="'+Math.min(18,Math.max(4,(gr.items||[]).length+1))+'">'+esc((gr.items||[]).join('\n'))+'</textarea></div>';
+    });
+    var delArmed=S.armed==='sec';
+    return h+'<span class="hint">한 줄에 한 항목. "1. "로 시작하면 번호 단계, 앞에 공백 두 칸이면 하위 항목, "!"로 시작하면 주의 문구.</span>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="grp-add">묶음 추가</button><button class="btn sm danger'+(delArmed?' armed':'')+'" data-act="sec-del">'+(delArmed?'한 번 더 누르면 문서 삭제':'문서 삭제')+'</button><span style="flex:1"></span><button class="btn ghost" data-act="sec-cancel">취소</button><button class="btn primary" data-act="sec-done">적용</button></div></div>';
+  }
+  h+='<div class="groups">'+(s.groups||[]).map(function(gr){return '<div class="group">'+(gr.h?'<h3>'+esc(gr.h)+'</h3>':'')+(gr.d?'<p class="gdesc">'+rich(gr.d)+'</p>':'')+itemsHTML(gr.items)+'</div>'}).join('')+'</div>';
+  var prev=secs[i-1],next=secs[i+1];
+  return h+'<div class="pager">'+(prev?'<a href="#/doc/'+encodeURIComponent(prev.id)+'"><small>이전</small><span>'+esc(prev.title)+'</span></a>':'<span></span>')+(next?'<a class="next" href="#/doc/'+encodeURIComponent(next.id)+'"><small>다음</small><span>'+esc(next.title)+'</span></a>':'')+'</div>';
+}
+function readSecEditor(s){
+  var t=$('#se-title'),l=$('#se-lede'),gE=$('#se-group');
+  var out={id:s.id,title:(t?t.value.trim():s.title)||s.title,lede:l?l.value.trim():s.lede,groups:[]};
+  var gv=gE?gE.value.trim():(s.group||'');if(gv)out.group=gv;
+  (s.groups||[]).forEach(function(g,gi){
+    var hE=document.querySelector('[data-gh="'+gi+'"]'),iE=document.querySelector('[data-gi="'+gi+'"]');
+    out.groups.push({h:hE?hE.value.trim():g.h,d:g.d||'',items:(iE?iE.value:(g.items||[]).join('\n')).split('\n').map(function(x){return x.replace(/\s+$/,'')}).filter(function(x){return x.trim()})});
+  });
+  return out;
+}
+
+/* ================= settings ================= */
+function settingsHTML(){
+  var secs=sections(),all=accounts();
+  var h='<div class="top"><div><h1 class="ttl">설정</h1><p class="sub">메뉴 구성과 백업, 보안을 관리합니다.</p></div></div><div class="set-grid">';
+  h+='<section class="panel"><div class="panel-h"><h2>문서 메뉴 관리</h2><span class="c">순서와 분류를 바꾸면 왼쪽 메뉴에 바로 반영됩니다</span></div><div class="mg">'
+    +secs.map(function(s,i){return '<div class="mg-row"><span class="no">'+String(i+1).padStart(2,'0')+'</span><a href="#/doc/'+encodeURIComponent(s.id)+'" class="mg-t">'+esc(s.title)+'</a>'
+      +'<input class="inp" data-sec-group="'+esc(s.id)+'" list="grp-list2" value="'+esc(docGroup(s))+'" aria-label="'+esc(s.title)+' 메뉴 분류">'
+      +'<span class="mg-btns"><button class="mini" data-act="sec-up" data-id="'+esc(s.id)+'"'+(i===0?' disabled':'')+' aria-label="위로">위로</button><button class="mini" data-act="sec-down" data-id="'+esc(s.id)+'"'+(i===secs.length-1?' disabled':'')+' aria-label="아래로">아래로</button></span></div>'}).join('')
+    +'<datalist id="grp-list2">'+docGroups().map(function(x){return '<option value="'+esc(x)+'">'}).join('')+'</datalist></div>'
+    +'<div style="margin-top:12px"><button class="btn sm" data-act="sec-new">문서 추가</button></div></section>';
+  var cats=uniq(CATS.concat(all.map(function(r){return r.cat||'사무실·기타'})));
+  h+='<section class="panel"><div class="panel-h"><h2>계정 분류</h2><span class="c">계정의 자세히 &gt; 기본 정보에서 분류를 바꿉니다</span></div><div class="chips static">'
+    +cats.map(function(c){return '<span class="chip">'+esc(c)+' <span>'+all.filter(function(r){return (r.cat||'사무실·기타')===c}).length+'</span></span>'}).join('')+'</div></section>';
+  h+='<section class="panel"><div class="panel-h"><h2>관리 방법</h2></div><ol class="howto">'
+    +'<li>계정 추가: 계정 메뉴 오른쪽 위 계정 추가를 누르고 자세히 창에서 이름, 주소, 분류를 적습니다.</li>'
+    +'<li>구글로 로그인하는 사이트는 카드의 로그인 칸에서 미라클 구글을 누릅니다.</li>'
+    +'<li>결제일, 금액, 메모는 카드의 자세히에서 고칩니다. 정기 결제 메뉴에 자동으로 모입니다.</li>'
+    +'<li>문서 추가: 왼쪽 메뉴 맨 아래 문서 추가를 누릅니다. 문서의 편집에서 메뉴 분류를 정합니다.</li>'
+    +'<li>홈의 바로가기와 핵심 숫자는 홈 오른쪽 위 홈 편집에서 고칩니다.</li>'
+    +'<li>모든 수정은 자동 저장되고, 같은 비밀번호로 연 사람에게 바로 반영됩니다.</li></ol></section>';
+  h+='<section class="panel"><div class="panel-h"><h2>백업과 보안</h2></div><div class="tools-in">'
+    +'<button class="btn sm" data-act="export">백업 내보내기</button>'
+    +'<label class="btn sm" for="imp-file">백업 불러오기</label><input type="file" id="imp-file" accept=".json,application/json" hidden>'
+    +'<button class="btn sm" data-act="master">마스터 비밀번호 변경</button>'
+    +'<button class="btn sm" data-act="forget">이 컴퓨터에서 기억 해제</button></div>';
+  if(S.masterOpen)h+='<form class="lockbox inline" data-form="master"><div class="field"><label for="ms-1">새 마스터 비밀번호 (8자 이상)</label><input class="inp" id="ms-1" type="password" autocomplete="new-password"></div><div class="field"><label for="ms-2">한 번 더</label><input class="inp" id="ms-2" type="password" autocomplete="new-password"></div><div class="err" id="ms-err"></div><button class="btn primary" type="submit">변경</button><p class="fine">변경 후에는 다른 사람도 새 비밀번호로 열어야 합니다.</p></form>';
+  return h+'</section></div>';
+}
+function moveSec(id,dir){
+  var ids=sections().map(function(x){return x.id}),i=ids.indexOf(id),j=i+dir;
+  if(i<0||j<0||j>=ids.length)return;
+  var t=ids[i];ids[i]=ids[j];ids[j]=t;put('order',{list:ids});render();
+}
 /* ================= gate ================= */
 function gateHTML(){
   if(S.phase==='loading'||(S.busy&&S.phase==='lock'&&!$('#g-pass')))return '<div class="gate"><div class="lockbox"><p class="eyebrow">LIFEMEAL 인수인계</p><h1>여는 중</h1><p>잠시만 기다려 주세요.</p></div></div>';
@@ -872,61 +1417,12 @@ function gateHTML(){
     +'<p class="fine">공용 컴퓨터에서는 기억하기를 끄세요. 모든 내용은 이 비밀번호로 암호화되어 저장됩니다.</p></form></div>';
 }
 
-/* ================= accounts (main table) ================= */
-function accHTML(){
-  var all=accounts(),q=S.q.trim().toLowerCase();
-  var rows=all.filter(function(x){return !q||[x.name,x.cat,x.login,x.note,x.owner,x.url,SSO[x.sso]||''].join(' ').toLowerCase().indexOf(q)>=0});
-  var noPw=all.filter(function(a){return !a.pw&&!a.sso}).length,gN=all.filter(function(a){return a.sso==='google'}).length;
-  var h='<div class="top"><div><h1 class="ttl">계정</h1><p class="sub">칸에 바로 입력하면 자동 저장됩니다. 구글로 로그인하는 계정은 아이디 옆 G를 누르세요.</p></div>'
-    +'<div class="top-r"><input class="inp search" id="q" type="search" placeholder="검색" value="'+esc(S.q)+'"></div></div>'
-    +'<p class="count">계정 '+all.length+'개'+(gN?' · <span class="gcount">미라클 구글 로그인 '+gN+'개</span>':'')+(noPw?' · <span class="warn">비밀번호 미입력 '+noPw+'개</span>':'')+'</p>';
-  var cats=uniq(CATS.concat(rows.map(function(r){return r.cat||'사무실·기타'})));
-  cats.forEach(function(c){
-    var rs=rows.filter(function(r){return (r.cat||'사무실·기타')===c});if(!rs.length)return;
-    h+='<section class="acat"><h2 class="acat-h">'+esc(c)+'<span>'+rs.length+'</span></h2><div class="acards">'+rs.map(cardHTML).join('')+'</div></section>';
-  });
-  if(!rows.length)h+='<p class="hint">검색 결과가 없습니다.</p>';
-  return h+'<button class="btn add" data-act="acc-add">계정 추가</button>';
-}
-var SSO={google:'미라클 구글',naver:'네이버 로그인',kakao:'카카오 로그인'};
-function googleId(){var g=findAcc('a31');return (g&&g.login)||''}
-function cell(r,f,ph,cls,type){return '<input class="cell box'+(cls?' '+cls:'')+'" data-id="'+esc(r.id)+'" data-f="'+f+'"'+(type?' type="'+type+'"':'')+' value="'+esc(f==='amount'?comma(r[f]):(r[f]||''))+'" placeholder="'+esc(ph||'')+'" aria-label="'+esc(r.name)+' '+f+'" autocomplete="off">'}
-function cardHTML(r){
-  var open=!!S.open[r.id],more=!!S.more[r.id],np=nextPay(r),show=!!S.showPw[r.id],href=hrefOf(r.url);
-  var h='<article class="acard'+(open||more?' is-open':'')+'">'
-    +'<div class="ac-top"><h3>'+esc(r.name||'(이름 없음)')+'</h3>'
-    +(r.sso?'<span class="sso-chip sso-'+esc(r.sso)+'">'+esc(SSO[r.sso]||r.sso)+'</span>':'')
-    +(href?'<a class="ac-link" href="'+esc(href)+'" target="_blank" rel="noopener">열기</a>':'')+'</div>'
-    +'<div class="ac-grid">'
-    +'<span class="ac-l">아이디</span><div class="ac-v">'+(r.sso==='google'
-        ?'<div class="ssobox"><span class="sso-id">'+esc(googleId()||'미라클 구글 계정')+'</span><button class="mini" data-act="sso" data-id="'+esc(r.id)+'" title="구글 로그인 표시 해제">해제</button></div>'
-        :'<div class="idbox">'+cell(r,'login',r.sso?'연결된 계정 아이디':'아이디','mono')+(r.sso?'':'<button class="mini g" data-act="sso" data-id="'+esc(r.id)+'" title="미라클 구글 로그인으로 표시">G</button>')+'</div>')+'</div>'
-    +'<span class="ac-l">비밀번호</span><div class="ac-v">'+(r.sso
-        ?'<span class="pw-sso">'+(r.sso==='google'?'구글 계정 비밀번호로 로그인':'연결된 계정 비밀번호로 로그인')+'</span>'
-        :'<div class="pwbox">'+cell(r,'pw','비밀번호','mono',show?'text':'password')+'<button class="mini" data-act="pw-eye" data-id="'+esc(r.id)+'">'+(show?'숨김':'보기')+'</button><button class="mini" data-act="pw-copy" data-id="'+esc(r.id)+'">복사</button></div>')+'</div>'
-    +'<span class="ac-l">결제</span><div class="ac-v"><div class="paybox"><span class="unit">'+(r.cycle==='y'?'매년 '+(num(r.paymonth)||'?')+'월':'매월')+'</span>'+cell(r,'payday','','num daycell')+'<span class="unit">일</span>'+cell(r,'amount','금액','num amtcell')+'<span class="unit">원</span>'+(np?'<span class="dd'+(np.days<=3?' soon':'')+'">'+(np.days===0?'오늘':'D-'+np.days)+'</span>':'')+'</div></div>'
-    +'<span class="ac-l ac-top-l">메모</span><div class="ac-v"><textarea class="cell box memo" data-id="'+esc(r.id)+'" data-f="note" rows="2" placeholder="메모" aria-label="'+esc(r.name)+' 메모">'+esc(r.note||'')+'</textarea></div>'
-    +'</div>'
-    +'<div class="ac-foot"><button class="ac-btn'+(open?' on':'')+'" data-act="toggle" data-id="'+esc(r.id)+'">로그인 방법'+(r.how?'':' (비어 있음)')+'</button><button class="ac-btn'+(more?' on':'')+'" data-act="more" data-id="'+esc(r.id)+'">상세 정보</button></div>';
-  if(open)h+='<div class="ac-sec">'+howHTML(r)+'</div>';
-  if(more)h+='<div class="ac-sec">'+moreHTML(r)+'</div>';
-  return h+'</article>';
-}
+/* ================= account helpers ================= */
 function howHTML(r){
   var editHow=S.editHow===r.id;
   var h='<div class="exp-h"><b>로그인 방법</b><button class="linkbtn" data-act="how-edit" data-id="'+esc(r.id)+'">'+(editHow?'완료':'수정')+'</button></div>';
   if(editHow)return h+'<textarea class="inp" id="how-'+esc(r.id)+'" data-id="'+esc(r.id)+'" data-f="how" rows="6" placeholder="한 줄에 한 단계. 예:&#10;1. 사이트 접속&#10;2. 미라클 구글로 로그인&#10;3. 대표 휴대폰으로 2단계 인증">'+esc(r.how||'')+'</textarea><span class="hint">"1. "로 시작하면 번호가 붙고, "!"로 시작하면 주의 문구가 됩니다.</span>';
   return h+(r.how?'<div class="howbox">'+itemsHTML(String(r.how).split('\n'))+'</div>':'<p class="hint">아직 없습니다. 수정을 눌러 적어 주세요.</p>');
-}
-function moreHTML(r){
-  var armed=S.armed==='del:'+r.id;
-  return '<div class="exp-fields">'
-    +'<div class="f"><label>로그인 방식</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="sso"><option value="">아이디 · 비밀번호</option><option value="google"'+(r.sso==='google'?' selected':'')+'>미라클 구글 로그인</option><option value="naver"'+(r.sso==='naver'?' selected':'')+'>네이버 아이디 로그인</option><option value="kakao"'+(r.sso==='kakao'?' selected':'')+'>카카오 계정 로그인</option></select></div>'
-    +fld(r,'name','서비스 이름')+fldCat(r)+fld(r,'url','접속 주소')+fld(r,'mfa','2차 인증 (받는 휴대폰 등)')+fld(r,'owner','명의 · 담당자')+fld(r,'paymethod','결제 수단 (카드 끝 4자리)')
-    +'<div class="f"><label>결제 주기</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="cycle"><option value="">없음</option><option value="m"'+(r.cycle==='m'?' selected':'')+'>매월</option><option value="y"'+(r.cycle==='y'?' selected':'')+'>매년</option></select></div>'
-    +(r.cycle==='y'?'<div class="f"><label>결제 월</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="paymonth"><option value="">선택</option>'+[1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){return '<option value="'+m+'"'+(String(r.paymonth)===String(m)?' selected':'')+'>'+m+'월</option>'}).join('')+'</select></div>':'')
-    +'<div class="f f-del"><button class="btn sm danger'+(armed?' armed':'')+'" data-act="acc-del" data-id="'+esc(r.id)+'">'+(armed?'한 번 더 누르면 삭제':'이 계정 삭제')+'</button></div>'
-    +'</div>';
 }
 function fld(r,f,label){return '<div class="f"><label>'+esc(label)+'</label><input class="cell box" data-id="'+esc(r.id)+'" data-f="'+f+'" value="'+esc(r[f]||'')+'" autocomplete="off"></div>'}
 function fldCat(r){var cats=uniq(CATS.concat(accounts().map(function(a){return a.cat})));return '<div class="f"><label>분류</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="cat">'+cats.map(function(c){return '<option'+(c===r.cat?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select></div>'}
@@ -941,110 +1437,8 @@ function saveField(id,f,val){
   put('acc_'+id,o);
 }
 
-/* ================= payments tab ================= */
-function payHTML(){
-  var bs=accounts().filter(function(a){return a.cycle||num(a.payday)||num(a.amount)});
-  var rows=bs.map(function(r){return {r:r,n:nextPay(r)}}).sort(function(a,b){return (a.n?a.n.days:99999)-(b.n?b.n.days:99999)});
-  var mSum=bs.filter(function(r){return r.cycle!=='y'}).reduce(function(s,r){return s+num(r.amount)},0);
-  var ySum=bs.filter(function(r){return r.cycle==='y'}).reduce(function(s,r){return s+num(r.amount)},0);
-  var miss=bs.filter(function(r){return !num(r.payday)||!num(r.amount)}).length;
-  var h='<div class="top"><div><h1 class="ttl">결제</h1><p class="sub">결제일이 가까운 순서입니다. 결제일과 금액은 계정 탭의 표에서 바로 고칠 수 있습니다.</p></div></div>'
-    +'<div class="sumrow"><div class="sum"><span>매월 나가는 돈</span><b>'+(mSum?mSum.toLocaleString('ko-KR'):'0')+'원</b></div>'
-    +(ySum?'<div class="sum"><span>연 결제</span><b>'+ySum.toLocaleString('ko-KR')+'원</b></div>':'')
-    +'<div class="sum"><span>정기 결제</span><b>'+bs.length+'건</b></div>'
-    +(miss?'<div class="sum warn"><span>금액·결제일 미입력</span><b>'+miss+'건</b></div>':'')+'</div>';
-  if(!rows.length)return h+'<p class="hint">계정 탭의 결제일 칸에 날짜를 넣으면 여기에 표시됩니다.</p>';
-  h+='<div class="tbl-wrap"><table class="tbl paytbl"><thead><tr><th>다음 결제</th><th></th><th>서비스</th><th>주기</th><th class="r">금액</th><th>결제 수단 · 메모</th></tr></thead><tbody>';
-  rows.forEach(function(x){
-    var r=x.r,n=x.n;
-    h+='<tr><td class="mono">'+(n?n.label:'—')+'</td><td>'+(n?'<span class="dd'+(n.days<=3?' soon':'')+'">'+(n.days===0?'오늘':'D-'+n.days)+'</span>':'<span class="dd none">미입력</span>')+'</td>'
-      +'<td><button class="linkbtn strong" data-act="goto-acc" data-id="'+esc(r.id)+'">'+esc(r.name)+'</button></td><td>'+esc(payLabel(r)||'매월')+'</td>'
-      +'<td class="r mono">'+(num(r.amount)?comma(r.amount)+'원':'<span class="muted">미입력</span>')+'</td><td class="muted">'+esc([r.paymethod,r.note].filter(Boolean).join(' · '))+'</td></tr>';
-  });
-  return h+'</tbody></table></div>';
-}
 
-/* ================= todo tab ================= */
-function todoHTML(){
-  var tasks=list('tasks'),open=tasks.filter(function(t){return !t.done}).length;
-  var h='<div class="top"><div><h1 class="ttl">할 일</h1><p class="sub">남은 일 '+open+'개 / 전체 '+tasks.length+'개</p></div></div><section class="panel"><ul class="tasks">';
-  tasks.forEach(function(t,i){
-    h+='<li class="task'+(t.done?' done':'')+'"><input type="checkbox" id="tk'+i+'" data-task="'+i+'" '+(t.done?'checked':'')+' aria-label="완료 표시">'
-      +'<span class="area">'+esc(t.area||'기타')+'</span><label class="t" for="tk'+i+'">'+rich(t.text)+'</label>'
-      +'<button class="x" data-act="task-del" data-i="'+i+'" aria-label="삭제" title="삭제">×</button></li>';
-  });
-  return h+'</ul><form class="task-add" data-form="task-add"><input class="inp" id="ta-area" placeholder="영역" list="area-list"><input class="inp" id="ta-text" placeholder="할 일 추가"><button class="btn" type="submit">추가</button>'
-    +'<datalist id="area-list">'+uniq(tasks.map(function(t){return t.area})).map(function(a){return '<option value="'+esc(a)+'">'}).join('')+'</datalist></form></section>';
-}
-
-/* ================= handover content tab ================= */
-function docHTML(){
-  if(S.view&&S.view.indexOf('s:')===0){var id=S.view.slice(2);if(secById(id))return '<button class="linkbtn back" data-act="doc-home">인수인계 내용 목록으로</button>'+secHTML(id)}
-  var d=meta(),facts=list('facts'),links=list('links'),secs=sections();
-  var h='<div class="top"><div><h1 class="ttl">인수인계 내용</h1><p class="sub">'+esc(d.basis?d.basis+' 기준':'')+(d.author?' · 작성 '+esc(d.author):'')+'</p></div>'
-    +(S.homeEdit?'':'<div class="top-r"><button class="btn" data-act="home-edit">편집</button></div>')+'</div>';
-  h+='<div class="handover">'
-    +'<div class="field"><label for="m-author">작성자</label><input class="inp" id="m-author" data-meta="author" value="'+esc(d.author)+'"></div>'
-    +'<div class="field"><label for="m-succ">인수자</label><input class="inp" id="m-succ" data-meta="successor" placeholder="이름과 직함" value="'+esc(d.successor)+'"></div>'
-    +'<div class="field"><label for="m-date">인계일</label><input class="inp" id="m-date" type="date" data-meta="handoverDate" value="'+esc(d.handoverDate)+'"></div></div>';
-  if(S.homeEdit){
-    return h+'<div class="editor">'
-      +'<div class="field"><label for="he-basis">기준일</label><input class="inp" id="he-basis" value="'+esc(d.basis)+'"></div>'
-      +'<div class="field"><label for="he-facts">핵심 숫자</label><textarea class="inp" id="he-facts" rows="5">'+esc(facts.map(function(f){return [f.label,f.value,f.note].join(' | ')}).join('\n'))+'</textarea><span class="hint">한 줄에 하나씩: 이름 | 값 | 설명</span></div>'
-      +'<div class="field"><label for="he-links">자주 쓰는 주소</label><textarea class="inp" id="he-links" rows="8">'+esc(links.map(function(l){return l.label+' | '+l.url}).join('\n'))+'</textarea><span class="hint">한 줄에 하나씩: 이름 | 주소</span></div>'
-      +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="sec-new">파트 추가</button><span style="flex:1"></span><button class="btn ghost" data-act="home-cancel">취소</button><button class="btn primary" data-act="home-done">적용</button></div></div>';
-  }
-  if(facts.length)h+='<div class="facts">'+facts.map(function(f){return '<div class="fact"><span class="l">'+esc(f.label)+'</span><span class="v">'+esc(f.value)+'</span><span class="n">'+esc(f.note||'')+'</span></div>'}).join('')+'</div>';
-  h+='<div class="toc-h"><h2>파트</h2></div><div class="toc">';
-  secs.forEach(function(s,i){h+='<button class="card" data-act="go" data-view="s:'+esc(s.id)+'"><div class="top-c"><span class="no">'+String(i+1).padStart(2,'0')+'</span></div><h3>'+esc(s.title)+'</h3><p>'+esc(s.lede)+'</p></button>'});
-  h+='</div>';
-  if(links.length)h+='<section class="panel" style="margin-top:28px"><div class="panel-h"><h2>자주 쓰는 주소</h2></div><ul class="links">'
-    +links.map(function(l){var href=hrefOf(l.url);return '<li>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener"><b>'+esc(l.label)+'</b><span>'+esc(shortUrl(l.url))+'</span></a>':'<a><b>'+esc(l.label)+'</b><span>'+esc(l.url)+'</span></a>')+'</li>'}).join('')+'</ul></section>';
-  return h;
-}
-function secHTML(id){
-  var s=secById(id),secs=sections(),i=secs.indexOf(s);
-  var h='<section class="sec-head"><div><h1>'+esc(s.title)+'</h1><p class="lede">'+esc(s.lede)+'</p></div>'
-    +(S.editing===id?'':'<div class="r"><button class="btn" data-act="sec-edit">편집</button></div>')+'</section>';
-  if(S.editing===id){
-    h+='<div class="editor"><div class="field"><label for="se-title">제목</label><input class="inp" id="se-title" value="'+esc(s.title)+'"></div>'
-      +'<div class="field"><label for="se-lede">요약 한 줄</label><textarea class="inp" id="se-lede" rows="2">'+esc(s.lede)+'</textarea></div>';
-    (s.groups||[]).forEach(function(g,gi){
-      var armed=S.armed==='g'+gi;
-      h+='<div class="edit-group"><div class="row"><input class="inp" data-gh="'+gi+'" value="'+esc(g.h)+'" placeholder="묶음 제목">'
-        +'<button class="btn sm danger'+(armed?' armed':'')+'" data-act="grp-del" data-g="'+gi+'">'+(armed?'한 번 더 누르면 삭제':'삭제')+'</button></div>'
-        +'<textarea class="inp" data-gi="'+gi+'" rows="'+Math.min(18,Math.max(4,(g.items||[]).length+1))+'">'+esc((g.items||[]).join('\n'))+'</textarea></div>';
-    });
-    var delArmed=S.armed==='sec';
-    return h+'<span class="hint">한 줄에 한 항목. "1. "로 시작하면 번호 단계, 앞에 공백 두 칸이면 하위 항목, "!"로 시작하면 주의 문구.</span>'
-      +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-act="grp-add">묶음 추가</button><button class="btn sm danger'+(delArmed?' armed':'')+'" data-act="sec-del">'+(delArmed?'한 번 더 누르면 파트 삭제':'파트 삭제')+'</button><span style="flex:1"></span><button class="btn ghost" data-act="sec-cancel">취소</button><button class="btn primary" data-act="sec-done">적용</button></div></div>';
-  }
-  h+='<div class="groups">'+(s.groups||[]).map(function(g){return '<div class="group">'+(g.h?'<h3>'+esc(g.h)+'</h3>':'')+(g.d?'<p class="gdesc">'+rich(g.d)+'</p>':'')+itemsHTML(g.items)+'</div>'}).join('')+'</div>';
-  var prev=secs[i-1],next=secs[i+1];
-  return h+'<div class="pager">'+(prev?'<button data-act="go" data-view="s:'+esc(prev.id)+'"><small>이전</small><span>'+esc(prev.title)+'</span></button>':'<span></span>')+(next?'<button class="next" data-act="go" data-view="s:'+esc(next.id)+'"><small>다음</small><span>'+esc(next.title)+'</span></button>':'')+'</div>';
-}
-function readSecEditor(s){
-  var t=$('#se-title'),l=$('#se-lede');
-  var out={id:s.id,title:(t?t.value.trim():s.title)||s.title,lede:l?l.value.trim():s.lede,groups:[]};
-  (s.groups||[]).forEach(function(g,gi){
-    var hE=document.querySelector('[data-gh="'+gi+'"]'),iE=document.querySelector('[data-gi="'+gi+'"]');
-    out.groups.push({h:hE?hE.value.trim():g.h,d:g.d||'',items:(iE?iE.value:(g.items||[]).join('\n')).split('\n').map(function(x){return x.replace(/\s+$/,'')}).filter(function(x){return x.trim()})});
-  });
-  return out;
-}
-
-/* ================= tools (footer) ================= */
-function toolsHTML(){
-  var h='<footer class="tools"><button class="linkbtn" data-act="tools">'+(S.toolsOpen?'도구 닫기':'도구')+'</button>';
-  if(S.toolsOpen){
-    h+='<div class="tools-in"><button class="btn sm" data-act="export">백업 내보내기</button>'
-      +'<label class="btn sm" for="imp-file">백업 불러오기</label><input type="file" id="imp-file" accept=".json,application/json" hidden>'
-      +'<button class="btn sm" data-act="master">마스터 비밀번호 변경</button>'
-      +'<button class="btn sm" data-act="forget">이 컴퓨터에서 기억 해제</button></div>';
-    if(S.masterOpen)h+='<form class="lockbox inline" data-form="master"><div class="field"><label for="ms-1">새 마스터 비밀번호 (8자 이상)</label><input class="inp" id="ms-1" type="password" autocomplete="new-password"></div><div class="field"><label for="ms-2">한 번 더</label><input class="inp" id="ms-2" type="password" autocomplete="new-password"></div><div class="err" id="ms-err"></div><button class="btn primary" type="submit">변경</button><p class="fine">변경 후에는 다른 사람도 새 비밀번호로 열어야 합니다.</p></form>';
-  }
-  return h+'</footer>';
-}
+/* ================= backup ================= */
 function exportBackup(){
   var data={meta:meta(),facts:list('facts'),tasks:list('tasks'),links:list('links'),sections:sections(),accounts:accounts(),exportedAt:new Date().toISOString()};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');
@@ -1061,16 +1455,21 @@ function copyText(text,btn){
 var metaT=null;
 function saveMetaSoon(){clearTimeout(metaT);metaT=setTimeout(function(){put('doc-meta',Object.assign({},meta()))},600)}
 document.addEventListener('click',function(ev){
-  var t=ev.target.closest('[data-act]');if(!t)return;
+  var t=ev.target.closest('[data-act]');
+  if(!t){var a0=ev.target.closest('a[href^="#/"]');if(a0&&S.navOpen)setNav(false);return}
   var a=t.getAttribute('data-act'),id=t.getAttribute('data-id'),s,gi;
   S.last=Date.now();
   switch(a){
-    case 'tab':setTab(t.getAttribute('data-tab'));break;
+    case 'nav-open':setNav(true);break;
+    case 'nav-close':setNav(false);break;
     case 'lock':forgetDevice();lockAll();break;
     case 'back-lock':S.phase='lock';S.pass=null;S.room=null;S.err='';render();break;
-    case 'toggle':S.open[id]=!S.open[id];if(!S.open[id]&&S.editHow===id)S.editHow=null;S.armed=null;render();break;
-    case 'more':S.more[id]=!S.more[id];S.armed=null;render();break;
-    case 'sso':{var sr=findAcc(id);if(sr){saveField(id,'sso',sr.sso==='google'?'':'google');render()}break}
+    case 'peek':S.peek=id;S.editHow=null;S.armed=null;render();var pk=$('.peek');if(pk)pk.focus&&pk.scrollTo&&pk.scrollTo(0,0);break;
+    case 'peek-close':closePeek();break;
+    case 'lf':S.lf=t.getAttribute('data-v')||'';render();break;
+    case 'cf':S.cf=t.getAttribute('data-v')||'';render();break;
+    case 'sso-set':saveField(id,'sso',t.getAttribute('data-v')||'');render();break;
+    case 'id-copy':{var ir=findAcc(id),iv=ir?(ir.sso==='google'?googleId():ir.login):'';if(iv)copyText(iv,t);else toast('아이디가 비어 있습니다.');break}
     case 'pw-eye':S.showPw[id]=!S.showPw[id];render();break;
     case 'pw-copy':{var r=findAcc(id);if(r&&r.pw)copyText(r.pw,t);else toast('비밀번호가 비어 있습니다.');break}
     case 'how-edit':
@@ -1079,38 +1478,41 @@ document.addEventListener('click',function(ev){
       render();var tt=$('#how-'+id);if(tt)tt.focus();break;
     case 'acc-add':{
       var nid=uid('a'),ord=accounts().reduce(function(m,x){return Math.max(m,x.ord||0)},0)+1;
-      put('acc_'+nid,{id:nid,ord:ord,cat:'사무실·기타',name:'새 계정',url:'',login:'',pw:'',mfa:'',owner:'',note:'',how:'',cycle:'',payday:'',amount:'',paymethod:''});
-      S.more[nid]=true;S.q='';render();
-      var inp=document.querySelector('.exp-fields [data-id="'+nid+'"][data-f="name"]');if(inp){inp.focus();inp.select()}
+      put('acc_'+nid,{id:nid,ord:ord,cat:S.cf||'사무실·기타',name:'새 계정',url:'',login:'',pw:'',mfa:'',owner:'',note:'',how:'',cycle:'',payday:'',amount:'',paymethod:'',sso:''});
+      S.q='';S.peek=nid;render();
+      var inp=document.querySelector('.peek [data-f="name"]');if(inp){inp.focus();inp.select()}
       break;}
     case 'acc-del':
-      if(S.armed==='del:'+id){del('acc_'+id);delete S.open[id];S.armed=null}else S.armed='del:'+id;
+      if(S.armed==='del:'+id){del('acc_'+id);S.peek=null;S.armed=null}else S.armed='del:'+id;
       render();break;
-    case 'goto-acc':S.more[id]=true;S.tab='acc';S.q='';render();var row=document.querySelector('[data-act="more"][data-id="'+id+'"]');if(row)row.scrollIntoView({block:'center'});break;
-    case 'tools':S.toolsOpen=!S.toolsOpen;S.masterOpen=false;render();break;
     case 'export':exportBackup();break;
     case 'master':S.masterOpen=!S.masterOpen;render();var m1=$('#ms-1');if(m1)m1.focus();break;
     case 'forget':forgetDevice().then(function(){toast('이 컴퓨터에서 기억을 해제했습니다. 다음에는 비밀번호를 입력해야 합니다.')});break;
-    case 'go':S.view=t.getAttribute('data-view');S.editing=null;S.armed=null;render();window.scrollTo(0,0);break;
-    case 'doc-home':S.view='home';S.editing=null;render();break;
-    case 'home-edit':S.homeEdit=true;render();break;
+    case 'scroll-docs':{var dz=$('#docs');if(dz)dz.scrollIntoView({behavior:'smooth',block:'start'});break}
+    case 'home-edit':S.homeEdit=true;render();window.scrollTo(0,0);break;
     case 'home-cancel':S.homeEdit=false;render();break;
     case 'home-done':{
-      var m=Object.assign({},meta());m.basis=$('#he-basis').value.trim();
+      var m=Object.assign({},meta());m.basis=$('#he-basis').value.trim();m.title=$('#he-title').value.trim();
       var facts=$('#he-facts').value.split('\n').map(function(l){var p=l.split('|').map(function(x){return x.trim()});return p[0]?{label:p[0],value:p[1]||'',note:p.slice(2).join(' | ')}:null}).filter(Boolean);
       var links=$('#he-links').value.split('\n').map(function(l){var i=l.indexOf('|');if(i<0){l=l.trim();return l?{label:l,url:''}:null}return {label:l.slice(0,i).trim(),url:l.slice(i+1).trim()}}).filter(function(x){return x&&x.label});
       S.homeEdit=false;put('doc-meta',m);put('facts',{list:facts});put('links',{list:links});render();break;}
-    case 'sec-new':{var sid=uid('s');S.homeEdit=false;put('sec_'+sid,{id:sid,title:'새 파트',lede:'',groups:[{h:'',d:'',items:[]}]});put('order',{list:sections().map(function(x){return x.id})});S.view='s:'+sid;S.editing=sid;render();break}
+    case 'sec-new':{
+      var sid=uid('s'),grp=(S.tab==='doc'&&S.doc&&secById(S.doc))?docGroup(secById(S.doc)):'';
+      var ns={id:sid,title:'새 문서',lede:'',groups:[{h:'',d:'',items:[]}]};if(grp)ns.group=grp;
+      put('sec_'+sid,ns);put('order',{list:sections().map(function(x){return x.id})});
+      S.pendingEdit=sid;go('doc/'+encodeURIComponent(sid));break}
     case 'task-del':{var ts=list('tasks').slice();ts.splice(+t.getAttribute('data-i'),1);put('tasks',{list:ts});render();break}
-    case 'sec-edit':S.editing=S.view.slice(2);S.armed=null;render();break;
+    case 'sec-edit':S.editing=S.doc;S.armed=null;render();break;
     case 'sec-cancel':S.editing=null;S.armed=null;render();break;
     case 'sec-done':s=readSecEditor(secById(S.editing));S.editing=null;S.armed=null;put('sec_'+s.id,s);render();break;
     case 'grp-add':s=readSecEditor(secById(S.editing));s.groups.push({h:'',d:'',items:[]});S.nodes['sec_'+s.id]=s;render();break;
     case 'grp-del':gi=+t.getAttribute('data-g');s=readSecEditor(secById(S.editing));if(S.armed==='g'+gi){s.groups.splice(gi,1);S.armed=null}else S.armed='g'+gi;S.nodes['sec_'+s.id]=s;render();break;
     case 'sec-del':
-      if(S.armed==='sec'){var dsid=S.editing;S.editing=null;S.armed=null;del('sec_'+dsid);put('order',{list:sections().map(function(x){return x.id}).filter(function(x){return x!==dsid})});S.view='home';render()}
+      if(S.armed==='sec'){var dsid=S.editing;S.editing=null;S.armed=null;del('sec_'+dsid);put('order',{list:sections().map(function(x){return x.id}).filter(function(x){return x!==dsid})});go('home')}
       else{s=readSecEditor(secById(S.editing));S.nodes['sec_'+s.id]=s;S.armed='sec';render()}
       break;
+    case 'sec-up':moveSec(id,-1);break;
+    case 'sec-down':moveSec(id,1);break;
   }
 });
 document.addEventListener('change',function(ev){
@@ -1122,9 +1524,10 @@ document.addEventListener('change',function(ev){
     rd.onload=function(){try{var o=JSON.parse(rd.result);mergeData(o).then(function(){render();toast('불러오기를 마쳤습니다. 기존 비밀번호는 그대로 두었습니다.')})}catch(e){toast('JSON 파일을 읽을 수 없습니다.')}};
     rd.readAsText(file);return;
   }
+  if(t.hasAttribute('data-sec-group')){var sg=secById(t.getAttribute('data-sec-group'));if(sg){var o2=Object.assign({},sg),v2=t.value.trim();if(v2)o2.group=v2;else delete o2.group;put('sec_'+o2.id,o2);setTimeout(render,0)}return}
   if(t.hasAttribute('data-f')&&t.hasAttribute('data-id')&&t.getAttribute('data-f')!=='how'){
     saveField(t.getAttribute('data-id'),t.getAttribute('data-f'),t.value);
-    if(/^(cycle|cat|name|payday|sso)$/.test(t.getAttribute('data-f')))setTimeout(render,0);
+    if(/^(cycle|paymonth|cat|name|payday|sso|url)$/.test(t.getAttribute('data-f')))setTimeout(render,0);
     return;
   }
   if(t.hasAttribute('data-task')){var ts=list('tasks').map(function(x){return Object.assign({},x)});ts[+t.getAttribute('data-task')].done=t.checked;put('tasks',{list:ts});render()}
@@ -1138,6 +1541,7 @@ document.addEventListener('input',function(ev){
 document.addEventListener('keydown',function(ev){
   S.last=Date.now();
   var t=ev.target;
+  if(ev.key==='Escape'){if(S.peek){closePeek();return}if(S.navOpen){setNav(false);return}}
   if(ev.key==='Enter'&&t.classList&&t.classList.contains('cell')&&t.tagName==='INPUT'){t.blur()}
 });
 document.addEventListener('focusout',function(){setTimeout(function(){if(S.stale&&!isBusyEditing())liveRender()},0)});
@@ -1169,6 +1573,7 @@ document.addEventListener('pointerdown',function(){S.last=Date.now()},{passive:t
 /* ================= boot ================= */
 renderShell();
 if(!window.crypto||!crypto.subtle){S.err='이 브라우저에서는 암호화를 쓸 수 없습니다. 최신 크롬이나 사파리로 열어 주세요.'}
+applyRoute();
 initFirebase();
 render();
 tryRemembered();
