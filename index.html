@@ -312,6 +312,22 @@ body{font-family:var(--sans)}
 .group > *:first-child{margin-top:0}
 .group ol.steps+ul.bul,.group ul.bul+ol.steps,.group .callout+ol,.group .callout+ul{margin-top:10px}
 
+.bill{margin-top:24px}
+.bill-sum{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--ink-2);margin-bottom:10px;font-variant-numeric:tabular-nums}
+.bill-sum b{color:var(--ink);font-weight:600}
+.bill-sum .warn{color:var(--warn)}
+.bill-list{list-style:none;margin:0;padding:0}
+.bill-list li{display:grid;grid-template-columns:52px 58px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line-soft);font-size:13.5px;cursor:pointer}
+.bill-list li:first-child{border-top:0}
+.bill-list li:hover .bn{color:var(--navy)}
+.bill-list .bd{font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:12.5px}
+.bill-list .bn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bill-list .bn small{color:var(--muted);font-size:11.5px;margin-left:6px}
+.bill-list .ba{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.dday{display:inline-flex;justify-content:center;height:21px;padding:0 7px;border-radius:999px;font-size:11px;background:var(--line-soft);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.dday.soon{background:var(--warn-soft);color:var(--warn)}
+.dday.none{background:transparent;color:var(--muted)}
+.subh{font-size:12px;font-weight:600;color:var(--navy);letter-spacing:.02em;border-top:1px solid var(--line-soft);padding-top:12px;margin-top:2px}
 .stale{margin-top:14px;font-size:12.5px;color:var(--check);background:var(--check-soft);border-radius:8px;padding:8px 12px;max-width:780px}
 .sec-tools{display:flex;gap:6px;flex-wrap:wrap}
 .danger-zone{border-top:1px solid var(--line-soft);padding-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -666,6 +682,7 @@ function homeHTML(){
   h+='<section class="panel"><div class="panel-h"><h2>자주 쓰는 주소</h2><span class="c">'+links.length+'</span></div><ul class="links">'
     +links.map(function(l){var href=hrefOf(l.url);return '<li>'+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener"><b>'+esc(l.label)+'</b><span>'+esc(shortUrl(l.url))+'</span></a>':'<a><b>'+esc(l.label)+'</b><span>'+esc(l.url)+'</span></a>')+'</li>'}).join('')
     +'</ul></section></div>';
+  h+=billingHTML(6);
   var accs=accounts(),todo=accs.filter(function(a){return a.status==='todo'}).length;
   h+='<div class="toc-h"><h2>파트별 정리</h2><p>'+(secs.length+1)+'개 파트</p></div><div class="toc">'
     +'<button class="card part1" data-act="go" data-view="accounts"><div class="top"><span class="no">01</span></div><h3>계정·비밀번호</h3><p>판매 채널, 광고, SNS, 툴 계정의 아이디와 비밀번호, 2차 인증 수단과 명의.</p><span class="meta">계정 '+accs.length+'개 · 입력 필요 '+todo+'개</span></button>';
@@ -718,14 +735,47 @@ function readSecEditor(s){
 /* ================= accounts ================= */
 var CATS=['판매 채널','연동·물류','광고','SNS·고객 채널','콘텐츠·디자인','AI·개발·협업','사무실·기타'];
 var STATUS={todo:{l:'입력 필요',c:'st-todo'},check:{l:'확인 필요',c:'st-check'},done:{l:'확인 완료',c:'st-done'}};
+var CYCLE={m:'매월',y:'매년'};
+function num(v){return parseInt(String(v==null?'':v).replace(/[^\d]/g,''),10)||0}
+function won(v){var n=num(v);return n?n.toLocaleString('ko-KR')+'원':''}
+function todayKST(){var d=new Date(Date.now()+9*3600000);return Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())}
+function dayIn(y,m,d){var last=new Date(Date.UTC(y,m+1,0)).getUTCDate();return Date.UTC(y,m,Math.min(d,last))}
+function nextPay(r){
+  var d=num(r.payday);if(!r.cycle||!d)return null;
+  var t=todayKST(),now=new Date(t),y=now.getUTCFullYear(),m=now.getUTCMonth(),c;
+  if(r.cycle==='m'){c=dayIn(y,m,d);if(c<t){m++;if(m>11){m=0;y++}c=dayIn(y,m,d)}}
+  else{var pm=(num(r.paymonth)||1)-1;c=dayIn(y,pm,d);if(c<t)c=dayIn(y+1,pm,d)}
+  var cd=new Date(c);return {label:(cd.getUTCMonth()+1)+'/'+cd.getUTCDate(),days:Math.round((c-t)/86400000)};
+}
+function payLabel(r){if(!r.cycle)return '';return (r.cycle==='m'?'매월 ':'매년 '+(num(r.paymonth)||'?')+'월 ')+(num(r.payday)?num(r.payday)+'일':'결제일 미입력')}
+function billingHTML(limit){
+  var bs=accounts().filter(function(a){return a.cycle});
+  var head='<section class="panel bill"><div class="panel-h"><h2>정기 결제</h2><span class="c">'+bs.length+'건</span>'
+    +(limit?'<span class="r"><button class="btn sm" data-act="bill-all">전체 보기</button></span>':'')+'</div>';
+  if(!bs.length)return head+'<p class="hint">계정 편집에서 결제 주기, 금액, 결제일을 넣으면 여기에 다가오는 결제 순서대로 표시됩니다.</p></section>';
+  var rows=bs.map(function(r){return {r:r,n:nextPay(r)}}).sort(function(a,b){return (a.n?a.n.days:99999)-(b.n?b.n.days:99999)});
+  var mSum=bs.filter(function(r){return r.cycle==='m'}).reduce(function(s,r){return s+num(r.amount)},0);
+  var ySum=bs.filter(function(r){return r.cycle==='y'}).reduce(function(s,r){return s+num(r.amount)},0);
+  var miss=bs.filter(function(r){return !num(r.payday)||!num(r.amount)}).length;
+  var h=head+'<div class="bill-sum"><span>매월 합계 <b>'+(mSum?mSum.toLocaleString('ko-KR')+'원':'0원')+'</b></span>'+(ySum?'<span>연 결제 합계 <b>'+ySum.toLocaleString('ko-KR')+'원</b></span>':'')
+    +(miss?'<span class="warn">금액 또는 결제일 미입력 '+miss+'건</span>':'')+'</div><ul class="bill-list">';
+  (limit?rows.slice(0,limit):rows).forEach(function(x){
+    var r=x.r,n=x.n,dd=n?(n.days===0?'오늘':'D-'+n.days):'미입력',cls=n?(n.days<=3?'dday soon':'dday'):'dday none';
+    h+='<li data-act="'+(limit?'bill-all':'acc-edit')+'" data-id="'+esc(r.id)+'"><span class="bd">'+(n?n.label:'—')+'</span><span class="'+cls+'">'+dd+'</span>'
+      +'<span class="bn">'+esc(r.name)+'<small>'+esc(payLabel(r))+(r.paymethod?' · '+esc(r.paymethod):'')+'</small></span><span class="ba">'+(won(r.amount)||'금액 미입력')+'</span></li>';
+  });
+  h+='</ul>'+(limit&&rows.length>limit?'<p class="hint" style="margin-top:8px">외 '+(rows.length-limit)+'건</p>':'')+'</section>';
+  return h;
+}
 function accHTML(){
-  var it=accounts(),cnt={all:it.length,todo:0,check:0,done:0};
-  it.forEach(function(x){cnt[x.status]=(cnt[x.status]||0)+1});
+  var it=accounts(),cnt={all:it.length,todo:0,check:0,done:0,bill:0};
+  it.forEach(function(x){cnt[x.status]=(cnt[x.status]||0)+1;if(x.cycle)cnt.bill++});
   var h='<section class="sec-head"><div><p class="eyebrow">Part 01</p><h1>계정·비밀번호</h1><p class="lede">채널, 광고, SNS, 툴 계정을 한곳에 모았습니다. 로그인 전에 2차 인증 수단과 명의를 먼저 확인하세요.</p></div>'
     +'<div class="r"><button class="btn" data-act="acc-settings">마스터 비밀번호 변경</button></div></section>';
   h+='<div class="acc-tools"><input class="inp search" id="acc-q" type="search" placeholder="서비스, 아이디, 메모 검색" value="'+esc(S.acc.q)+'">'
-    +'<div class="chips">'+[['all','전체'],['todo','입력 필요'],['check','확인 필요'],['done','확인 완료']].map(function(c){return '<button class="chip'+(S.acc.filter===c[0]?' on':'')+'" data-act="acc-filter" data-f="'+c[0]+'">'+c[1]+' '+cnt[c[0]]+'</button>'}).join('')+'</div>'
+    +'<div class="chips">'+[['all','전체'],['todo','입력 필요'],['check','확인 필요'],['done','확인 완료'],['bill','정기 결제']].map(function(c){return '<button class="chip'+(S.acc.filter===c[0]?' on':'')+'" data-act="acc-filter" data-f="'+c[0]+'">'+c[1]+' '+cnt[c[0]]+'</button>'}).join('')+'</div>'
     +'<button class="btn primary" data-act="acc-add">계정 추가</button></div>';
+  h+=billingHTML(0);
   h+='<div class="acc-list" id="acc-list">'+accListHTML()+'</div>';
   h+='<div class="note"><b>인수인계 후 할 일</b><span>1. 인수자가 주요 계정에 직접 로그인해 보고 상태를 확인 완료로 바꿉니다.</span><span>2. 로그인 확인이 끝나면 비밀번호를 변경하고 최근 변경일을 적습니다.</span><span>3. 2차 인증 휴대폰과 명의가 퇴사자 개인에게 묶인 계정은 회사 명의로 옮깁니다.</span></div>';
   return h;
@@ -733,7 +783,8 @@ function accHTML(){
 function accListHTML(){
   var q=S.acc.q.trim().toLowerCase(),f=S.acc.filter;
   var rows=accounts().filter(function(x){
-    if(f!=='all'&&x.status!==f)return false;
+    if(f==='bill'){if(!x.cycle)return false}
+    else if(f!=='all'&&x.status!==f)return false;
     return !q||[x.name,x.cat,x.login,x.note,x.owner,x.url,x.mfa].join(' ').toLowerCase().indexOf(q)>=0;
   });
   if(!rows.length)return '<p class="hint">조건에 맞는 계정이 없습니다.</p>';
@@ -754,6 +805,7 @@ function rowHTML(r){
     +'<div class="cell cell-st"><span class="pill '+st.c+'">'+st.l+'</span></div>'
     +'<div class="cell cell-ed"><button class="ic" data-act="acc-edit" data-id="'+esc(r.id)+'">편집</button></div>';
   if(r.owner)det.push('<span><b>명의·담당</b> '+esc(r.owner)+'</span>');
+  if(r.cycle){var np=nextPay(r);det.push('<span><b>결제</b> '+esc(payLabel(r))+(r.amount?' · '+won(r.amount):'')+(r.paymethod?' · '+esc(r.paymethod):'')+(np?' · 다음 '+np.label+(np.days===0?' (오늘)':' (D-'+np.days+')'):'')+'</span>')}
   if(r.changed)det.push('<span><b>최근 변경</b> '+esc(r.changed)+'</span>');
   if(r.note)det.push('<span>'+rich(r.note)+'</span>');
   if(det.length)h+='<div class="detail">'+det.join('')+'</div>';
@@ -784,13 +836,19 @@ function renderModal(){
     +'<div class="field"><label for="f-owner">명의 · 담당자</label><input class="inp" id="f-owner" value="'+esc(r.owner)+'"></div>'
     +'<div class="field"><label for="f-changed">최근 변경일</label><input class="inp" id="f-changed" type="date" value="'+esc(r.changed)+'"></div>'
     +'<div class="field"><label for="f-status">상태</label><select class="inp" id="f-status">'+Object.keys(STATUS).map(function(k){return '<option value="'+k+'"'+(r.status===k?' selected':'')+'>'+STATUS[k].l+'</option>'}).join('')+'</select></div>'
+    +'<div class="field full"><span class="subh">정기 결제</span></div>'
+    +'<div class="field"><label for="f-cycle">결제 주기</label><select class="inp" id="f-cycle"><option value="">없음</option><option value="m"'+(r.cycle==='m'?' selected':'')+'>매월</option><option value="y"'+(r.cycle==='y'?' selected':'')+'>매년</option></select></div>'
+    +'<div class="field"><label for="f-amount">결제 금액 (원)</label><input class="inp" id="f-amount" inputmode="numeric" value="'+esc(r.amount||'')+'" placeholder="예: 49000"></div>'
+    +'<div class="field"><label for="f-payday">결제일 (며칠)</label><input class="inp" id="f-payday" type="number" min="1" max="31" value="'+esc(r.payday||'')+'" placeholder="예: 25"></div>'
+    +'<div class="field"><label for="f-paymonth">결제 월 (매년일 때)</label><select class="inp" id="f-paymonth"><option value="">선택</option>'+[1,2,3,4,5,6,7,8,9,10,11,12].map(function(mo){return '<option value="'+mo+'"'+(String(r.paymonth)===String(mo)?' selected':'')+'>'+mo+'월</option>'}).join('')+'</select></div>'
+    +'<div class="field full"><label for="f-paymethod">결제 수단 · 명의</label><input class="inp" id="f-paymethod" value="'+esc(r.paymethod||'')+'" placeholder="예: 법인카드 끝자리 1234, 대표 명의"><span class="hint">카드번호 전체는 적지 말고 끝 4자리만 적어 주세요.</span></div>'
     +'<div class="field full"><label for="f-note">메모 · 로그인 방법</label><textarea class="inp" id="f-note" rows="3">'+esc(r.note)+'</textarea></div></div>'
     +'<div class="err" id="f-err"></div><div class="sheet-f">'+(md.isNew?'':'<button class="btn danger'+(md.delArmed?' armed':'')+'" type="button" data-act="acc-del">'+(md.delArmed?'한 번 더 누르면 삭제':'삭제')+'</button>')
     +'<span class="sp"></span><button class="btn ghost" type="button" data-act="modal-close">취소</button><button class="btn primary" type="submit">저장</button></div></form></div>';
 }
 function readAccForm(){
   var g=function(id){var e=$('#'+id);return e?e.value.trim():''};
-  return {cat:g('f-cat')||'사무실·기타',name:g('f-name'),url:g('f-url'),login:g('f-login'),pw:($('#f-pw')||{value:''}).value,mfa:g('f-mfa'),owner:g('f-owner'),changed:g('f-changed'),status:g('f-status')||'todo',note:g('f-note')};
+  return {cat:g('f-cat')||'사무실·기타',name:g('f-name'),url:g('f-url'),login:g('f-login'),pw:($('#f-pw')||{value:''}).value,mfa:g('f-mfa'),owner:g('f-owner'),changed:g('f-changed'),status:g('f-status')||'todo',note:g('f-note'),cycle:g('f-cycle'),amount:g('f-amount').replace(/[^\d]/g,''),payday:g('f-payday'),paymonth:g('f-paymonth'),paymethod:g('f-paymethod')};
 }
 function closeModal(){S.acc.modal=null;renderModal();if(S.stale)liveRender()}
 
@@ -837,6 +895,7 @@ document.addEventListener('click',function(ev){
     case 'lock':lockAll();break;
     case 'back-lock':S.phase='lock';S.pass=null;S.room=null;S.err='';render();break;
     case 'export':exportBackup();break;
+    case 'bill-all':S.acc.filter='bill';go('accounts');break;
     case 'import-cancel':S.imp=null;renderMain();break;
     case 'import-go':importData();break;
     case 'home-edit':S.homeEdit=true;renderMain();break;
