@@ -634,7 +634,13 @@ function homeHTML(){
   var d=meta(),facts=list('facts'),tasks=list('tasks'),links=list('links'),secs=sections(),open=tasks.filter(function(t){return !t.done}).length;
   var h='<section class="hero"><div><p class="eyebrow">LIFEMEAL · 브랜드 업무 이관</p><h1>인수인계 홈</h1>'
     +'<p class="sub">'+esc(d.basis?d.basis+' 기준':'')+(d.author?' · 작성 '+esc(d.author):'')+'</p></div>'
-    +'<div class="hero-r">'+(S.homeEdit?'':'<button class="btn" data-act="export">백업 내보내기</button><button class="btn" data-act="home-edit">홈 편집</button>')+'</div></section>';
+    +'<div class="hero-r">'+(S.homeEdit?'':'<label class="btn" for="imp-file">데이터 가져오기</label><input type="file" id="imp-file" accept=".json,application/json" hidden><button class="btn" data-act="export">백업 내보내기</button><button class="btn" data-act="home-edit">홈 편집</button>')+'</div></section>';
+  if(S.imp){
+    var ip=S.imp,isec=(ip.sections||[]).length,iacc=(ip.accounts||[]).length;
+    h+='<div class="stale" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;max-width:none">'
+      +'<span style="flex:1;min-width:220px">'+esc(ip._name)+' · 파트 '+isec+'개, 계정 '+iacc+'개, 할 일 '+(ip.tasks||[]).length+'개. 같은 파트와 계정은 파일 내용으로 바뀌고, 나머지는 그대로 둡니다.</span>'
+      +'<button class="btn sm" data-act="import-cancel">취소</button><button class="btn sm primary" data-act="import-go"'+(S.impBusy?' disabled':'')+'>'+(S.impBusy?'가져오는 중':'가져오기')+'</button></div>';
+  }
   h+='<div class="handover">'
     +'<div class="field"><label for="m-author">작성자</label><input class="inp" id="m-author" data-meta="author" value="'+esc(d.author)+'"></div>'
     +'<div class="field"><label for="m-succ">인수자</label><input class="inp" id="m-succ" data-meta="successor" placeholder="이름과 직함" value="'+esc(d.successor)+'"></div>'
@@ -802,6 +808,21 @@ function exportBackup(){
   toast('백업 파일에는 비밀번호가 암호화되지 않은 상태로 들어 있습니다. 안전한 곳에 보관하세요.');
 }
 
+function importData(){
+  if(!S.imp||S.impBusy)return;
+  S.impBusy=true;renderMain();
+  var nodes=seedToNodes(S.imp),cur=meta(),m=Object.assign({},nodes['doc-meta']);
+  Object.keys(cur).forEach(function(k){if(cur[k])m[k]=cur[k]});
+  nodes['doc-meta']=m;
+  if(list('tasks').length)nodes['tasks']={list:list('tasks').concat(nodes['tasks'].list.filter(function(t){return !list('tasks').some(function(x){return x.text===t.text})}))};
+  if(list('facts').length&&!(S.imp.facts||[]).length)delete nodes['facts'];
+  if(list('links').length&&!(S.imp.links||[]).length)delete nodes['links'];
+  nodes['order']={list:uniq(list('order').concat(nodes['order'].list))};
+  Promise.all(Object.keys(nodes).map(function(k){return put(k,nodes[k])})).then(function(){
+    S.imp=null;S.impBusy=false;render();toast('가져오기를 마쳤습니다.');
+  });
+}
+
 /* ================= events ================= */
 var metaT=null;
 function saveMetaSoon(){clearTimeout(metaT);metaT=setTimeout(function(){put('doc-meta',Object.assign({},meta()))},600)}
@@ -816,6 +837,8 @@ document.addEventListener('click',function(ev){
     case 'lock':lockAll();break;
     case 'back-lock':S.phase='lock';S.pass=null;S.room=null;S.err='';render();break;
     case 'export':exportBackup();break;
+    case 'import-cancel':S.imp=null;renderMain();break;
+    case 'import-go':importData();break;
     case 'home-edit':S.homeEdit=true;renderMain();break;
     case 'home-cancel':S.homeEdit=false;S.stale=false;renderMain();break;
     case 'home-done':{
@@ -856,6 +879,12 @@ document.addEventListener('click',function(ev){
 });
 document.addEventListener('change',function(ev){
   var t=ev.target;
+  if(t.id==='imp-file'){
+    var file=t.files&&t.files[0];if(!file)return;
+    var rd=new FileReader();
+    rd.onload=function(){try{var o=JSON.parse(rd.result);if(!o||typeof o!=='object')throw 0;o._name=file.name;S.imp=o;renderMain()}catch(e){toast('JSON 파일을 읽을 수 없습니다. seed 또는 백업 파일인지 확인해 주세요.')}};
+    rd.readAsText(file);return;
+  }
   if(t.hasAttribute('data-task')){var ts=list('tasks').map(function(x){return Object.assign({},x)});ts[+t.getAttribute('data-task')].done=t.checked;put('tasks',{list:ts});renderMain()}
   else if(t.hasAttribute('data-meta')){var m=Object.assign({},meta());m[t.getAttribute('data-meta')]=t.value;S.nodes['doc-meta']=m;saveMetaSoon()}
 });
