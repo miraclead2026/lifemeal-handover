@@ -738,6 +738,10 @@ a.slot-u:hover{color:var(--navy)}
 .dg-h::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--cc-ink)}
 .dgroup a.card{border-top:3px solid var(--cc-ink)}
 @media (max-width:600px){.peek-f{padding-inline:16px}.peek-f .hint{display:none}.peek-f .btn{flex:1}}
+
+.dl{font-weight:500;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--navy) 35%,transparent);text-underline-offset:3px}
+.dl::after{content:"\2197";font-size:.78em;margin-left:2px;opacity:.7}
+.dl:hover{text-decoration-color:var(--navy)}
 </style>
 </head>
 <body>
@@ -888,7 +892,7 @@ function seedToNodes(seed){
   out['tasks']={list:(seed.tasks||[]).map(function(t){return Object.assign({id:uid('t')},t)})};
   out['links']={list:seed.links||[]};
   var order=[];
-  (seed.sections||[]).forEach(function(s){var id=s.id||uid('s');order.push(id);out['sec_'+id]={id:id,title:s.title||'파트',lede:s.lede||'',groups:(s.groups||[]).map(function(g){return {h:g.h||'',d:g.d||'',items:g.items||[]}})}});
+  (seed.sections||[]).forEach(function(s){var id=s.id||uid('s');order.push(id);out['sec_'+id]={id:id,title:s.title||'파트',lede:s.lede||'',groups:(s.groups||[]).map(function(g){return {h:g.h||'',d:g.d||'',items:g.items||[]}})};if(s.group)out['sec_'+id].group=s.group});
   out['order']={list:order};
   (seed.accounts||[]).forEach(function(a,i){var id=a.id||uid('a');out['acc_'+id]=Object.assign({cat:'',name:'',url:'',login:'',pw:'',mfa:'',owner:'',changed:'',note:'',status:'todo'},a,{id:id,ord:a.ord!=null?a.ord:i})});
   return out;
@@ -945,6 +949,8 @@ function hrefOf(u){u=String(u||'').trim();if(!u)return '';if(/^https?:\/\//i.tes
 function shortUrl(u){return String(u||'').replace(/^https?:\/\//,'').replace(/\/$/,'')}
 function uniq(a){var o=[];a.forEach(function(x){if(x&&o.indexOf(x)<0)o.push(x)});return o}
 function rich(s){
+  var L=[];
+  s=String(s==null?'':s).replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g,function(m,a,u){L.push([a,u]);return '\u0000'+(L.length-1)+'\u0000'});
   var h=esc(s);
   h=h.replace(/(^|[\s(（:])((?:https?:\/\/)?(?:[a-z0-9-]+\.)+(?:io|me|com|net|kr|ai|app)(?![a-z0-9-])(?:\/[A-Za-z0-9_\-.\/?=&;%#]*)?)/g,function(m,pre,url){
     var trail='';while(/[.]$/.test(url)){trail=url.slice(-1)+trail;url=url.slice(0,-1)}
@@ -953,6 +959,7 @@ function rich(s){
   });
   h=h.replace(/(^|[^&\w])#([0-9A-Fa-f]{6})\b/g,function(m,pre,hx){return pre+'<span class="sw" style="--c:#'+hx+'"></span>#'+hx.toUpperCase()});
   h=h.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+  h=h.replace(/\u0000(\d+)\u0000/g,function(m,i){var x=L[+i];return '<a class="dl" href="'+esc(x[1])+'" target="_blank" rel="noopener">'+esc(x[0])+'</a>'});
   return h;
 }
 function itemsHTML(lines){
@@ -1049,7 +1056,7 @@ function mergeData(src){
   }
   if(src.sections){
     Object.keys(nodes).forEach(function(k){if(k.indexOf('sec_')===0)puts.push([k,nodes[k]])});
-    puts.push(['order',{list:uniq(list('order').concat(nodes['order'].list))}]);
+    puts.push(['order',{list:uniq((src.order||[]).concat(list('order'),nodes['order'].list))}]);
   }
   if(src.facts&&src.facts.length)puts.push(['facts',nodes['facts']]);
   if(src.links&&src.links.length)puts.push(['links',nodes['links']]);
@@ -1074,7 +1081,7 @@ function payLabel(r){if(!r.cycle)return '';return (r.cycle==='y'?'매년 '+(num(
 /* ================= shell & routing ================= */
 var CATS=['판매 채널','연동·물류','광고','SNS·고객 채널','콘텐츠·디자인','AI·개발·협업','업무·협업','사무실·기타'];
 var DOC_GROUPS=['팀과 업무','브랜드·콘텐츠','채널·운영','툴·노하우'];
-var DOC_DEFAULT={'사람과 역할':'팀과 업무','업무 현황':'팀과 업무','작업 방식':'팀과 업무','브랜드와 제품':'브랜드·콘텐츠','카피와 표현 지침':'브랜드·콘텐츠','캠페인 기록':'브랜드·콘텐츠','채널과 광고':'채널·운영','자사몰 리뉴얼':'채널·운영','대시보드와 웹페이지':'채널·운영','툴과 제작 노하우':'툴·노하우'};
+var DOC_DEFAULT={'처음 시작하기':'팀과 업무','자료 위치 (구글 드라이브)':'팀과 업무','물류·CS (네이처온)':'채널·운영','사람과 역할':'팀과 업무','업무 현황':'팀과 업무','작업 방식':'팀과 업무','브랜드와 제품':'브랜드·콘텐츠','카피와 표현 지침':'브랜드·콘텐츠','캠페인 기록':'브랜드·콘텐츠','채널과 광고':'채널·운영','자사몰 리뉴얼':'채널·운영','대시보드와 웹페이지':'채널·운영','툴과 제작 노하우':'툴·노하우'};
 function docGroup(s){return (s&&s.group)||DOC_DEFAULT[s&&s.title]||'기타'}
 function docGroups(){return uniq(DOC_GROUPS.concat(sections().map(docGroup)))}
 var CC_N=8;
