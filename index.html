@@ -710,6 +710,34 @@ a.slot-u:hover{color:var(--navy)}
   .mg-row .inp{grid-column:2/-1;grid-row:2}
   .shortcuts{grid-template-columns:minmax(0,1fr)}
 }
+
+/* ===== category colors + save ===== */
+.cc0{--cc-bg:#E8EFFC;--cc-ink:#2F5AA8}.cc1{--cc-bg:#E0F3F0;--cc-ink:#1D7468}.cc2{--cc-bg:#FCEFE1;--cc-ink:#A2560F}.cc3{--cc-bg:#FBE8F0;--cc-ink:#A23A66}.cc4{--cc-bg:#EFE9FB;--cc-ink:#6743AD}.cc5{--cc-bg:#E2F1F9;--cc-ink:#1C6890}.cc6{--cc-bg:#E7F3E3;--cc-ink:#3B772C}.cc7{--cc-bg:#ECEEF2;--cc-ink:#566072}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cc0{--cc-bg:#1A2742;--cc-ink:#9DBBF0}:root:not([data-theme="light"]) .cc1{--cc-bg:#123029;--cc-ink:#7FD1C4}:root:not([data-theme="light"]) .cc2{--cc-bg:#35240F;--cc-ink:#F0B879}:root:not([data-theme="light"]) .cc3{--cc-bg:#361A27;--cc-ink:#EFA0C0}:root:not([data-theme="light"]) .cc4{--cc-bg:#281E42;--cc-ink:#C3AEF2}:root:not([data-theme="light"]) .cc5{--cc-bg:#12293A;--cc-ink:#8CC8EA}:root:not([data-theme="light"]) .cc6{--cc-bg:#1A2E16;--cc-ink:#A6D896}:root:not([data-theme="light"]) .cc7{--cc-bg:#1F2530;--cc-ink:#AEB6C4}}
+:root[data-theme="dark"] .cc0{--cc-bg:#1A2742;--cc-ink:#9DBBF0}:root[data-theme="dark"] .cc1{--cc-bg:#123029;--cc-ink:#7FD1C4}:root[data-theme="dark"] .cc2{--cc-bg:#35240F;--cc-ink:#F0B879}:root[data-theme="dark"] .cc3{--cc-bg:#361A27;--cc-ink:#EFA0C0}:root[data-theme="dark"] .cc4{--cc-bg:#281E42;--cc-ink:#C3AEF2}:root[data-theme="dark"] .cc5{--cc-bg:#12293A;--cc-ink:#8CC8EA}:root[data-theme="dark"] .cc6{--cc-bg:#1A2E16;--cc-ink:#A6D896}:root[data-theme="dark"] .cc7{--cc-bg:#1F2530;--cc-ink:#AEB6C4}
+.cpill{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:7px;background:var(--cc-bg,var(--line-soft));color:var(--cc-ink,var(--ink-2));font-size:14px;font-weight:600;white-space:nowrap}
+.cpill.sm{height:22px;padding:0 8px;font-size:12px;margin-left:4px}
+.acat{margin-top:36px}
+.acat-h{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--cc-bg,var(--line))}
+.acat-h .n{font-size:12.5px;color:var(--muted);font-weight:400}
+.acat-h .cpill{font-size:14px;font-weight:600;color:var(--cc-ink)}
+.slot{border-top:3px solid var(--cc-ink,var(--line))}
+.slot .ico,.peek .ico{background:var(--cc-bg);color:var(--cc-ink)}
+.chip.cat::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--cc-ink);margin-right:6px;vertical-align:1px}
+.chip.cat.on{background:var(--cc-ink);border-color:var(--cc-ink);color:var(--surface)}
+.chip.cat.on::before{background:var(--surface)}
+.btn.save{display:none}
+.slot.dirty .btn.save{display:inline-flex;background:var(--navy);border-color:var(--navy);color:var(--on-navy)}
+.slot.dirty{box-shadow:0 0 0 2px color-mix(in srgb,var(--navy) 30%,transparent)}
+.peek-f{position:sticky;bottom:0;margin-top:auto;background:var(--surface);border-top:1px solid var(--line);padding:12px 24px calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:12px}
+.peek-f .hint{flex:1;min-width:0}
+.peek.dirty .peek-f .btn{box-shadow:0 0 0 3px color-mix(in srgb,var(--navy) 25%,transparent)}
+.menu-sub{display:flex;align-items:center;gap:7px}
+.menu-sub::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--cc-ink);flex:none}
+.dg-h{display:flex;align-items:center;gap:8px;color:var(--cc-ink)}
+.dg-h::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--cc-ink)}
+.dgroup a.card{border-top:3px solid var(--cc-ink)}
+@media (max-width:600px){.peek-f{padding-inline:16px}.peek-f .hint{display:none}.peek-f .btn{flex:1}}
 </style>
 </head>
 <body>
@@ -1049,6 +1077,9 @@ var DOC_GROUPS=['팀과 업무','브랜드·콘텐츠','채널·운영','툴·�
 var DOC_DEFAULT={'사람과 역할':'팀과 업무','업무 현황':'팀과 업무','작업 방식':'팀과 업무','브랜드와 제품':'브랜드·콘텐츠','카피와 표현 지침':'브랜드·콘텐츠','캠페인 기록':'브랜드·콘텐츠','채널과 광고':'채널·운영','자사몰 리뉴얼':'채널·운영','대시보드와 웹페이지':'채널·운영','툴과 제작 노하우':'툴·노하우'};
 function docGroup(s){return (s&&s.group)||DOC_DEFAULT[s&&s.title]||'기타'}
 function docGroups(){return uniq(DOC_GROUPS.concat(sections().map(docGroup)))}
+var CC_N=8;
+function catCls(c){c=c||'사무실·기타';var i=CATS.indexOf(c);if(i<0){i=0;for(var k=0;k<c.length;k++)i=(i*31+c.charCodeAt(k))%CC_N}return 'cc'+i}
+function grpCls(g){var i=DOC_GROUPS.indexOf(g);return 'cc'+(i<0?7:[0,4,2,5][i])}
 function menuDocs(){var ss=sections(),o=[];docGroups().forEach(function(g){ss.forEach(function(s){if(docGroup(s)===g)o.push(s)})});return o}
 var SSO={google:'미라클 구글',naver:'네이버 로그인',kakao:'카카오 로그인'};
 function googleId(){var g=findAcc('a31');return (g&&g.login)||''}
@@ -1109,7 +1140,7 @@ function sideHTML(){
     +'<p class="menu-h">인수인계 문서</p>';
   docGroups().forEach(function(g){
     var ss=secs.filter(function(s){return docGroup(s)===g});if(!ss.length)return;
-    h+='<p class="menu-sub">'+esc(g)+'</p>'+ss.map(function(s){return mi('doc/'+encodeURIComponent(s.id),s.title||'(제목 없음)','', '', 'doc')}).join('');
+    h+='<p class="menu-sub '+grpCls(g)+'">'+esc(g)+'</p>'+ss.map(function(s){return mi('doc/'+encodeURIComponent(s.id),s.title||'(제목 없음)','', '', 'doc')}).join('');
   });
   h+='<button class="menu-add" data-act="sec-new">+ 문서 추가</button></nav>'
     +'<div class="side-foot"><div class="state" id="state"></div><span class="sp"></span>'
@@ -1212,7 +1243,7 @@ function homeHTML(){
   h+='<section class="blk" id="docs"><div class="blk-h"><h2>인수인계 문서</h2><span class="c">'+secs.length+'개</span><button class="btn sm r" data-act="sec-new">문서 추가</button></div>';
   docGroups().forEach(function(g){
     var ss=secs.filter(function(s){return docGroup(s)===g});if(!ss.length)return;
-    h+='<div class="dgroup"><h3 class="dg-h">'+esc(g)+'</h3><div class="toc">'+ss.map(function(s){var n=countItems(s);return '<a class="card" href="#/doc/'+encodeURIComponent(s.id)+'"><h3>'+esc(s.title)+'</h3><p>'+esc(s.lede)+'</p><span class="meta">'+(s.groups||[]).length+'개 묶음 · '+n+'개 항목</span></a>'}).join('')+'</div></div>';
+    h+='<div class="dgroup '+grpCls(g)+'"><h3 class="dg-h">'+esc(g)+'</h3><div class="toc">'+ss.map(function(s){var n=countItems(s);return '<a class="card" href="#/doc/'+encodeURIComponent(s.id)+'"><h3>'+esc(s.title)+'</h3><p>'+esc(s.lede)+'</p><span class="meta">'+(s.groups||[]).length+'개 묶음 · '+n+'개 항목</span></a>'}).join('')+'</div></div>';
   });
   return h+'</section>';
 }
@@ -1231,10 +1262,10 @@ function accHTML(){
     +(noPw?'<span class="warn-t">비밀번호 미입력 '+noPw+'개</span>':'')+'</div>';
   var cats=uniq(CATS.concat(all.map(function(r){return r.cat||'사무실·기타'})));
   h+='<div class="chips"><button class="chip'+(!cf?' on':'')+'" data-act="cf" data-v="">전체 분류</button>'
-    +cats.map(function(c){var n=byLogin.filter(function(r){return (r.cat||'사무실·기타')===c}).length;return n||cf===c?'<button class="chip'+(cf===c?' on':'')+'" data-act="cf" data-v="'+esc(c)+'">'+esc(c)+' <span>'+n+'</span></button>':''}).join('')+'</div>';
+    +cats.map(function(c){var n=byLogin.filter(function(r){return (r.cat||'사무실·기타')===c}).length;return n||cf===c?'<button class="chip cat '+catCls(c)+(cf===c?' on':'')+'" data-act="cf" data-v="'+esc(c)+'">'+esc(c)+' <span>'+n+'</span></button>':''}).join('')+'</div>';
   cats.forEach(function(c){
     var rs=rows.filter(function(r){return (r.cat||'사무실·기타')===c});if(!rs.length)return;
-    h+='<section class="acat"><h2 class="acat-h">'+esc(c)+'<span>'+rs.length+'</span></h2><div class="acards">'+rs.map(slotHTML).join('')+'</div></section>';
+    h+='<section class="acat '+catCls(c)+'"><h2 class="acat-h"><span class="cpill">'+esc(c)+'</span><span class="n">'+rs.length+'개</span></h2><div class="acards">'+rs.map(slotHTML).join('')+'</div></section>';
   });
   if(!rows.length)h+='<p class="hint" style="margin-top:24px">조건에 맞는 계정이 없습니다.</p>';
   return h;
@@ -1256,7 +1287,7 @@ function credProps(r){
 }
 function slotHTML(r){
   var href=hrefOf(r.url),g=r.sso==='google';
-  return '<article class="slot'+(g?' is-g':'')+'">'
+  return '<article class="slot '+catCls(r.cat)+(g?' is-g':'')+'">'
     +'<div class="slot-h"><span class="ico'+(g?' g':'')+'" aria-hidden="true">'+initial(r.name)+'</span><div class="slot-t"><h3><button class="tbtn" data-act="peek" data-id="'+esc(r.id)+'">'+esc(r.name||'(이름 없음)')+'</button></h3>'
     +(href?'<a class="slot-u" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(shortUrl(r.url))+'</a>':'<span class="slot-u none">주소 없음</span>')+'</div>'
     +(g?'<span class="gbadge" title="미라클 구글 로그인">G</span>':'')+'</div>'
@@ -1264,13 +1295,13 @@ function slotHTML(r){
     +(r.note?'<div class="prop top"><span class="pl">메모</span><div class="pv note-v">'+esc(r.note)+'</div></div>':'')+'</div>'
     +'<div class="slot-f">'+(href?extBtn(href,'바로가기'):'<button class="btn sm" data-act="peek" data-id="'+esc(r.id)+'">주소 입력</button>')
     +'<span class="sp"></span>'+(r.cycle?'<span class="tag">'+(r.cycle==='y'?'연 결제':'월 결제')+'</span>':'')
-    +'<button class="btn sm ghost" data-act="peek" data-id="'+esc(r.id)+'">자세히</button></div>'
+    +'<button class="btn sm save" data-act="save">저장</button><button class="btn sm ghost" data-act="peek" data-id="'+esc(r.id)+'">자세히</button></div>'
     +'</article>';
 }
 function peekHTML(r){
   var href=hrefOf(r.url),np=nextPay(r),armed=S.armed==='del:'+r.id,g=r.sso==='google';
-  return '<div class="peek-scrim" data-act="peek-close"></div><aside class="peek" role="dialog" aria-modal="true" aria-label="'+esc(r.name)+' 자세히">'
-    +'<div class="peek-top"><span class="crumb">계정 / '+esc(r.cat||'사무실·기타')+'</span><button class="x-btn" data-act="peek-close" aria-label="닫기">×</button></div>'
+  return '<div class="peek-scrim" data-act="peek-close"></div><aside class="peek '+catCls(r.cat)+'" role="dialog" aria-modal="true" aria-label="'+esc(r.name)+' 자세히">'
+    +'<div class="peek-top"><span class="crumb">계정 <span class="cpill sm">'+esc(r.cat||'사무실·기타')+'</span></span><button class="x-btn" data-act="peek-close" aria-label="닫기">×</button></div>'
     +'<div class="peek-h"><span class="ico lg'+(g?' g':'')+'" aria-hidden="true">'+initial(r.name)+'</span><div class="ph-t"><h2>'+esc(r.name||'(이름 없음)')+'</h2>'+(href?'<a class="u" href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(shortUrl(r.url))+'</a>':'<span class="u">주소를 아래 기본 정보에 넣어 주세요</span>')+'</div>'+(href?extBtn(href,'바로가기'):'')+'</div>'
     +'<div class="peek-b">'
     +'<section class="pk"><h3>로그인</h3><div class="props">'+credProps(r)
@@ -1290,7 +1321,7 @@ function peekHTML(r){
     +'<div class="f"><label>로그인 방식</label><select class="cell box" data-id="'+esc(r.id)+'" data-f="sso"><option value="">아이디 · 비밀번호</option><option value="google"'+(g?' selected':'')+'>미라클 구글 로그인</option><option value="naver"'+(r.sso==='naver'?' selected':'')+'>네이버 아이디 로그인</option><option value="kakao"'+(r.sso==='kakao'?' selected':'')+'>카카오 계정 로그인</option></select></div>'
     +'</div></section>'
     +'<div class="pk-del"><button class="btn sm danger'+(armed?' armed':'')+'" data-act="acc-del" data-id="'+esc(r.id)+'">'+(armed?'한 번 더 누르면 삭제':'이 계정 삭제')+'</button></div>'
-    +'</div></aside>';
+    +'</div><div class="peek-f"><span class="hint">입력한 내용은 칸을 벗어나면 자동 저장됩니다</span><button class="btn primary" data-act="peek-done">저장하고 닫기</button></div></aside>';
 }
 
 /* ================= payments ================= */
@@ -1377,7 +1408,7 @@ function settingsHTML(){
     +'<div style="margin-top:12px"><button class="btn sm" data-act="sec-new">문서 추가</button></div></section>';
   var cats=uniq(CATS.concat(all.map(function(r){return r.cat||'사무실·기타'})));
   h+='<section class="panel"><div class="panel-h"><h2>계정 분류</h2><span class="c">계정의 자세히 &gt; 기본 정보에서 분류를 바꿉니다</span></div><div class="chips static">'
-    +cats.map(function(c){return '<span class="chip">'+esc(c)+' <span>'+all.filter(function(r){return (r.cat||'사무실·기타')===c}).length+'</span></span>'}).join('')+'</div></section>';
+    +cats.map(function(c){return '<span class="chip cat '+catCls(c)+'">'+esc(c)+' <span>'+all.filter(function(r){return (r.cat||'사무실·기타')===c}).length+'</span></span>'}).join('')+'</div></section>';
   h+='<section class="panel"><div class="panel-h"><h2>관리 방법</h2></div><ol class="howto">'
     +'<li>계정 추가: 계정 메뉴 오른쪽 위 계정 추가를 누르고 자세히 창에서 이름, 주소, 분류를 적습니다.</li>'
     +'<li>구글로 로그인하는 사이트는 카드의 로그인 칸에서 미라클 구글을 누릅니다.</li>'
@@ -1392,6 +1423,18 @@ function settingsHTML(){
     +'<button class="btn sm" data-act="forget">이 컴퓨터에서 기억 해제</button></div>';
   if(S.masterOpen)h+='<form class="lockbox inline" data-form="master"><div class="field"><label for="ms-1">새 마스터 비밀번호 (8자 이상)</label><input class="inp" id="ms-1" type="password" autocomplete="new-password"></div><div class="field"><label for="ms-2">한 번 더</label><input class="inp" id="ms-2" type="password" autocomplete="new-password"></div><div class="err" id="ms-err"></div><button class="btn primary" type="submit">변경</button><p class="fine">변경 후에는 다른 사람도 새 비밀번호로 열어야 합니다.</p></form>';
   return h+'</section></div>';
+}
+var pingT=null;
+function savedPing(){clearTimeout(pingT);pingT=setTimeout(function(){toast('저장했습니다')},400)}
+function flushBox(box){
+  if(!box)return;
+  var a=document.activeElement;if(a&&box.contains(a)&&a.blur)a.blur();
+  box.querySelectorAll('[data-f][data-id]').forEach(function(el){
+    var f=el.getAttribute('data-f'),id=el.getAttribute('data-id');
+    if(f==='how'){if(S.editHow===id){saveField(id,'how',el.value.replace(/\s+$/,''));S.editHow=null}return}
+    saveField(id,f,el.value);
+  });
+  box.classList.remove('dirty');
 }
 function moveSec(id,dir){
   var ids=sections().map(function(x){return x.id}),i=ids.indexOf(id),j=i+dir;
@@ -1434,7 +1477,7 @@ function saveField(id,f,val){
   if((f==='payday'||f==='amount')&&(o.payday||o.amount)&&!o.cycle)o.cycle='m';
   if((f==='payday'||f==='amount')&&!o.payday&&!o.amount&&o.cycle==='m')o.cycle='';
   if(o[f]===r[f])return;
-  put('acc_'+id,o);
+  put('acc_'+id,o).then(savedPing);
 }
 
 
@@ -1466,6 +1509,8 @@ document.addEventListener('click',function(ev){
     case 'back-lock':S.phase='lock';S.pass=null;S.room=null;S.err='';render();break;
     case 'peek':S.peek=id;S.editHow=null;S.armed=null;render();var pk=$('.peek');if(pk)pk.focus&&pk.scrollTo&&pk.scrollTo(0,0);break;
     case 'peek-close':closePeek();break;
+    case 'save':flushBox(t.closest('.slot'));toast('저장했습니다');setTimeout(render,0);break;
+    case 'peek-done':flushBox($('.peek'));closePeek();toast('저장했습니다');break;
     case 'lf':S.lf=t.getAttribute('data-v')||'';render();break;
     case 'cf':S.cf=t.getAttribute('data-v')||'';render();break;
     case 'sso-set':saveField(id,'sso',t.getAttribute('data-v')||'');render();break;
@@ -1535,6 +1580,7 @@ document.addEventListener('change',function(ev){
 });
 document.addEventListener('input',function(ev){
   var t=ev.target;S.last=Date.now();
+  if(t.hasAttribute('data-f')&&t.hasAttribute('data-id')){var bx=t.closest('.slot,.peek');if(bx)bx.classList.add('dirty')}
   if(t.id==='q'){S.q=t.value;var pos=t.selectionStart;render();var n=$('#q');if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}}
   else if(t.hasAttribute('data-meta')){var m=Object.assign({},meta());m[t.getAttribute('data-meta')]=t.value;S.nodes['doc-meta']=m;saveMetaSoon()}
 });
