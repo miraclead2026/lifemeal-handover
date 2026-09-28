@@ -196,7 +196,7 @@ code.k{font-family:var(--mono);font-size:12.5px;background:var(--line-soft);bord
 .cat-h{display:flex;align-items:baseline;gap:8px;padding:0 2px 8px;border-bottom:1px solid var(--line)}
 .cat-h h3{font-size:13.5px;font-weight:600}
 .cat-h span{font-size:12px;color:var(--muted)}
-.acc-head,.acc-row{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,.9fr) 84px 44px;gap:12px;align-items:center}
+.acc-head,.acc-row{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1.1fr) minmax(0,1.25fr) minmax(0,.9fr) 84px 96px;gap:12px;align-items:center}
 .acc-head{font-size:11.5px;color:var(--muted);padding:10px 12px 6px}
 .acc-row{padding:11px 12px;border-bottom:1px solid var(--line-soft);background:var(--surface)}
 .acc-row:first-of-type{border-top-left-radius:0}
@@ -327,6 +327,17 @@ body{font-family:var(--sans)}
 .dday{display:inline-flex;justify-content:center;height:21px;padding:0 7px;border-radius:999px;font-size:11px;background:var(--line-soft);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
 .dday.soon{background:var(--warn-soft);color:var(--warn)}
 .dday.none{background:transparent;color:var(--muted)}
+.howbox{grid-column:1/-1;background:var(--bg);border:1px solid var(--line-soft);border-radius:8px;padding:10px 12px;margin-top:2px}
+.howbox ol.steps{list-style:none;margin:0;padding:0;counter-reset:st;display:flex;flex-direction:column;gap:6px}
+.howbox ol.steps>li{counter-increment:st;position:relative;padding-left:28px;font-size:13px;line-height:1.6}
+.howbox ol.steps>li::before{content:counter(st);position:absolute;left:0;top:1px;width:19px;height:19px;border-radius:50%;background:var(--navy-soft);color:var(--navy);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.howbox ul.bul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.howbox ul.bul>li{position:relative;padding-left:16px;font-size:13px;line-height:1.6}
+.howbox ul.bul>li::before{content:"";position:absolute;left:2px;top:.8em;width:7px;height:1px;background:var(--navy)}
+.howbox ul.sub{list-style:none;margin:4px 0 0;padding:0}
+.howbox ul.sub li{font-size:12.5px;color:var(--ink-2);padding-left:12px}
+.howbox .callout{margin:8px 0 0;font-size:12.5px}
+.ic.on{border-color:var(--navy);color:var(--navy);background:var(--navy-soft)}
 .subh{font-size:12px;font-weight:600;color:var(--navy);letter-spacing:.02em;border-top:1px solid var(--line-soft);padding-top:12px;margin-top:2px}
 .stale{margin-top:14px;font-size:12.5px;color:var(--check);background:var(--check-soft);border-radius:8px;padding:8px 12px;max-width:780px}
 .sec-tools{display:flex;gap:6px;flex-wrap:wrap}
@@ -654,7 +665,7 @@ function homeHTML(){
   if(S.imp){
     var ip=S.imp,isec=(ip.sections||[]).length,iacc=(ip.accounts||[]).length;
     h+='<div class="stale" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;max-width:none">'
-      +'<span style="flex:1;min-width:220px">'+esc(ip._name)+' · 파트 '+isec+'개, 계정 '+iacc+'개, 할 일 '+(ip.tasks||[]).length+'개. 같은 파트와 계정은 파일 내용으로 바뀌고, 나머지는 그대로 둡니다.</span>'
+      +'<span style="flex:1;min-width:220px">'+esc(ip._name)+' · 파트 '+isec+'개, 계정 '+iacc+'개, 할 일 '+(ip.tasks||[]).length+'개. 같은 파트는 파일 내용으로 바뀌고, 계정은 파일에 적힌 칸만 채웁니다. 이미 입력한 비밀번호와 빈 칸은 그대로 둡니다.</span>'
       +'<button class="btn sm" data-act="import-cancel">취소</button><button class="btn sm primary" data-act="import-go"'+(S.impBusy?' disabled':'')+'>'+(S.impBusy?'가져오는 중':'가져오기')+'</button></div>';
   }
   h+='<div class="handover">'
@@ -803,12 +814,13 @@ function rowHTML(r){
     +'<div class="cell"><span class="lbl">비밀번호</span><div class="cred">'+(r.pw?'<span class="v'+(rev?'':' mask')+'" id="pw-'+esc(r.id)+'">'+(rev?esc(r.pw):'••••••••')+'</span><button class="ic" data-act="reveal" data-id="'+esc(r.id)+'">'+(rev?'숨기기':'보기')+'</button><button class="ic" data-act="copy" data-k="pw" data-id="'+esc(r.id)+'">복사</button>':'<span class="empty need">미입력</span>')+'</div></div>'
     +'<div class="cell cell-mfa"><span class="lbl">2차 인증</span><span class="mfa">'+(r.mfa?esc(r.mfa):'<span class="empty">—</span>')+'</span></div>'
     +'<div class="cell cell-st"><span class="pill '+st.c+'">'+st.l+'</span></div>'
-    +'<div class="cell cell-ed"><button class="ic" data-act="acc-edit" data-id="'+esc(r.id)+'">편집</button></div>';
+    +'<div class="cell cell-ed" style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end">'+(r.how?'<button class="ic'+(S.acc.open&&S.acc.open[r.id]?' on':'')+'" data-act="how-toggle" data-id="'+esc(r.id)+'" title="로그인 방법">방법</button>':'')+'<button class="ic" data-act="acc-edit" data-id="'+esc(r.id)+'">편집</button></div>';
   if(r.owner)det.push('<span><b>명의·담당</b> '+esc(r.owner)+'</span>');
   if(r.cycle){var np=nextPay(r);det.push('<span><b>결제</b> '+esc(payLabel(r))+(r.amount?' · '+won(r.amount):'')+(r.paymethod?' · '+esc(r.paymethod):'')+(np?' · 다음 '+np.label+(np.days===0?' (오늘)':' (D-'+np.days+')'):'')+'</span>')}
   if(r.changed)det.push('<span><b>최근 변경</b> '+esc(r.changed)+'</span>');
   if(r.note)det.push('<span>'+rich(r.note)+'</span>');
   if(det.length)h+='<div class="detail">'+det.join('')+'</div>';
+  if(r.how&&S.acc.open&&S.acc.open[r.id])h+='<div class="howbox">'+itemsHTML(String(r.how).split('\n'))+'</div>';
   return h+'</div>';
 }
 function refreshList(){var l=$('#acc-list');if(l)l.innerHTML=accListHTML()}
@@ -836,6 +848,7 @@ function renderModal(){
     +'<div class="field"><label for="f-owner">명의 · 담당자</label><input class="inp" id="f-owner" value="'+esc(r.owner)+'"></div>'
     +'<div class="field"><label for="f-changed">최근 변경일</label><input class="inp" id="f-changed" type="date" value="'+esc(r.changed)+'"></div>'
     +'<div class="field"><label for="f-status">상태</label><select class="inp" id="f-status">'+Object.keys(STATUS).map(function(k){return '<option value="'+k+'"'+(r.status===k?' selected':'')+'>'+STATUS[k].l+'</option>'}).join('')+'</select></div>'
+    +'<div class="field full"><label for="f-how">로그인 방법</label><textarea class="inp" id="f-how" rows="5" placeholder="한 줄에 한 단계. 예:&#10;1. sell.smartstore.naver.com 접속&#10;2. 판매자 아이디로 로그인&#10;3. 대표 휴대폰으로 2단계 인증">'+esc(r.how||'')+'</textarea><span class="hint">"1. "로 시작하면 번호가 붙고, "!"로 시작하면 주의 문구가 됩니다.</span></div>'
     +'<div class="field full"><span class="subh">정기 결제</span></div>'
     +'<div class="field"><label for="f-cycle">결제 주기</label><select class="inp" id="f-cycle"><option value="">없음</option><option value="m"'+(r.cycle==='m'?' selected':'')+'>매월</option><option value="y"'+(r.cycle==='y'?' selected':'')+'>매년</option></select></div>'
     +'<div class="field"><label for="f-amount">결제 금액 (원)</label><input class="inp" id="f-amount" inputmode="numeric" value="'+esc(r.amount||'')+'" placeholder="예: 49000"></div>'
@@ -848,7 +861,7 @@ function renderModal(){
 }
 function readAccForm(){
   var g=function(id){var e=$('#'+id);return e?e.value.trim():''};
-  return {cat:g('f-cat')||'사무실·기타',name:g('f-name'),url:g('f-url'),login:g('f-login'),pw:($('#f-pw')||{value:''}).value,mfa:g('f-mfa'),owner:g('f-owner'),changed:g('f-changed'),status:g('f-status')||'todo',note:g('f-note'),cycle:g('f-cycle'),amount:g('f-amount').replace(/[^\d]/g,''),payday:g('f-payday'),paymonth:g('f-paymonth'),paymethod:g('f-paymethod')};
+  return {cat:g('f-cat')||'사무실·기타',name:g('f-name'),url:g('f-url'),login:g('f-login'),pw:($('#f-pw')||{value:''}).value,mfa:g('f-mfa'),owner:g('f-owner'),changed:g('f-changed'),status:g('f-status')||'todo',note:g('f-note'),cycle:g('f-cycle'),amount:g('f-amount').replace(/[^\d]/g,''),payday:g('f-payday'),paymonth:g('f-paymonth'),paymethod:g('f-paymethod'),how:($('#f-how')||{value:''}).value.replace(/\s+$/,'')};
 }
 function closeModal(){S.acc.modal=null;renderModal();if(S.stale)liveRender()}
 
@@ -872,10 +885,19 @@ function importData(){
   var nodes=seedToNodes(S.imp),cur=meta(),m=Object.assign({},nodes['doc-meta']);
   Object.keys(cur).forEach(function(k){if(cur[k])m[k]=cur[k]});
   nodes['doc-meta']=m;
-  if(list('tasks').length)nodes['tasks']={list:list('tasks').concat(nodes['tasks'].list.filter(function(t){return !list('tasks').some(function(x){return x.text===t.text})}))};
-  if(list('facts').length&&!(S.imp.facts||[]).length)delete nodes['facts'];
-  if(list('links').length&&!(S.imp.links||[]).length)delete nodes['links'];
-  nodes['order']={list:uniq(list('order').concat(nodes['order'].list))};
+  if(nodes['tasks']&&list('tasks').length)nodes['tasks']={list:list('tasks').concat(nodes['tasks'].list.filter(function(t){return !list('tasks').some(function(x){return x.text===t.text})}))};
+  ['facts','links'].forEach(function(k){if(!S.imp[k])delete nodes[k]});
+  if(!S.imp.tasks)delete nodes['tasks'];
+  if(!S.imp.meta)delete nodes['doc-meta'];
+  Object.keys(nodes).forEach(function(k){
+    if(k.indexOf('acc_')!==0||!S.nodes[k])return;
+    var cur2=S.nodes[k],raw=(S.imp.accounts||[]).filter(function(x){return 'acc_'+x.id===k})[0],inc=raw||{},out=Object.assign({},cur2);
+    Object.keys(inc).forEach(function(f){var v=inc[f];if(v!==''&&v!=null&&f!=='ord'&&f!=='id')out[f]=v});
+    nodes[k]=out;
+  });
+  if(nodes['facts']&&list('facts').length&&!(S.imp.facts||[]).length)delete nodes['facts'];
+  if(nodes['links']&&list('links').length&&!(S.imp.links||[]).length)delete nodes['links'];
+  if(S.imp.sections)nodes['order']={list:uniq(list('order').concat(nodes['order'].list))};else delete nodes['order'];
   Promise.all(Object.keys(nodes).map(function(k){return put(k,nodes[k])})).then(function(){
     S.imp=null;S.impBusy=false;render();toast('가져오기를 마쳤습니다.');
   });
@@ -895,6 +917,7 @@ document.addEventListener('click',function(ev){
     case 'lock':lockAll();break;
     case 'back-lock':S.phase='lock';S.pass=null;S.room=null;S.err='';render();break;
     case 'export':exportBackup();break;
+    case 'how-toggle':{var hid=t.getAttribute('data-id');S.acc.open=S.acc.open||{};S.acc.open[hid]=!S.acc.open[hid];refreshList();break}
     case 'bill-all':S.acc.filter='bill';go('accounts');break;
     case 'import-cancel':S.imp=null;renderMain();break;
     case 'import-go':importData();break;
