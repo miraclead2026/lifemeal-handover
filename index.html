@@ -739,6 +739,27 @@ a.slot-u:hover{color:var(--navy)}
 .dgroup a.card{border-top:3px solid var(--cc-ink)}
 @media (max-width:600px){.peek-f{padding-inline:16px}.peek-f .hint{display:none}.peek-f .btn{flex:1}}
 
+.mrow{display:flex;align-items:center;min-width:0;border-radius:7px}
+.mrow .mi{flex:1;min-width:0}
+.mrow .mi .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.star-b{flex:none;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border:0;background:none;border-radius:6px;cursor:pointer;color:var(--muted);opacity:0;padding:0}
+.star-b svg{width:14px;height:14px}
+.mrow:hover .star-b,.star-b:focus-visible{opacity:.55}
+.star-b:hover{opacity:1!important;background:var(--bg)}
+.star-b.on{opacity:1;color:var(--warn)}
+@media (hover:none){.star-b{opacity:.35}.star-b.on{opacity:1}}
+.menu-fav{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--warn);padding:10px 10px 3px;font-weight:600}
+.menu-fav svg{width:11px;height:11px}
+.mi.fav{padding:5px 10px 5px 14px;font-size:13px}
+.mi.fav::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--warn);flex:none;margin-right:2px;opacity:.7}
+.star-t{display:inline-flex;align-items:center;gap:6px}
+.star-t svg{width:15px;height:15px}
+.btn.star-t.on{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
+.card .cstar{color:var(--warn);display:inline-flex;vertical-align:-2px;margin-right:5px}
+.card .cstar svg{width:13px;height:13px}
+.sec-head .r{display:flex;gap:8px;align-items:center}
+.pin .pst{display:inline-flex;color:var(--warn);margin-right:6px;vertical-align:-2px}
+.pin .pst svg{width:13px;height:13px}
 .dwg{margin:12px 0 8px;padding:14px 14px 10px;border:1px solid var(--line);border-radius:10px;background-color:var(--surface);background-image:linear-gradient(color-mix(in srgb,var(--navy) 6%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--navy) 6%,transparent) 1px,transparent 1px);background-size:16px 16px;display:flex;flex-wrap:wrap;gap:16px 22px;align-items:flex-end;max-width:780px}
 .dwg svg{display:block;max-width:100%;height:auto;overflow:visible}
 .dwg .f{fill:var(--surface);stroke:var(--navy);stroke-width:1.4}
@@ -1226,6 +1247,8 @@ function mi(route,label,icon,n,cls){
   var on=(route==='doc/'+S.doc&&S.tab==='doc')||route===S.tab;
   return '<a class="mi'+(cls?' '+cls:'')+(on?' on':'')+'" href="#/'+route+'"'+(on?' aria-current="page"':'')+'>'+(icon?ic(icon):'')+'<span class="t">'+esc(label)+'</span>'+(n!=null&&n!==''?'<span class="n">'+n+'</span>':'')+'</a>';
 }
+function starSVG(on){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.1 1.1 5.9L12 16.6l-5.3 2.9 1.1-5.9-4.4-4.1 6-.8z" fill="'+(on?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'}
+function docRow(s,cls){return '<div class="mrow">'+mi('doc/'+encodeURIComponent(s.id),s.title||'(제목 없음)','','',cls)+'<button class="star-b'+(s.pin?' on':'')+'" data-act="pin-toggle" data-sid="'+esc(s.id)+'" aria-pressed="'+(s.pin?'true':'false')+'" title="'+(s.pin?'즐겨찾기 해제':'즐겨찾기에 추가')+'" aria-label="'+esc(s.title)+' '+(s.pin?'즐겨찾기 해제':'즐겨찾기에 추가')+'">'+starSVG(s.pin)+'</button></div>'}
 function sideHTML(){
   var all=accounts(),tasks=list('tasks'),openT=tasks.filter(function(t){return !t.done}).length,secs=sections();
   var h='<a class="side-brand" href="#/home"><span class="eyebrow">LIFEMEAL</span><b>업무 인수인계</b>'+(TEST?'<span class="env-test">TEST</span>':'')+'</a>'
@@ -1237,9 +1260,11 @@ function sideHTML(){
     +'<p class="menu-h">업무</p>'
     +mi('todo','할 일','check',openT||'')
     +'<p class="menu-h">인수인계 문서</p>';
+  var favs=secs.filter(function(s){return s.pin});
+  if(favs.length)h+='<p class="menu-fav">'+starSVG(true)+'즐겨찾기</p>'+favs.map(function(s){return mi('doc/'+encodeURIComponent(s.id),s.title||'(제목 없음)','','','fav')}).join('');
   docGroups().forEach(function(g){
     var ss=secs.filter(function(s){return docGroup(s)===g});if(!ss.length)return;
-    h+='<p class="menu-sub '+grpCls(g)+'">'+esc(g)+'</p>'+ss.map(function(s){return mi('doc/'+encodeURIComponent(s.id),s.title||'(제목 없음)','', '', 'doc')}).join('');
+    h+='<p class="menu-sub '+grpCls(g)+'">'+esc(g)+'</p>'+ss.map(function(s){return docRow(s,'doc')}).join('');
   });
   h+='<button class="menu-add" data-act="sec-new">+ 문서 추가</button></nav>'
     +'<div class="side-foot"><div class="state" id="state"></div><span class="sp"></span>'
@@ -1331,7 +1356,7 @@ function homeHTML(){
     +'<button class="tile" data-act="scroll-docs"><span class="l">'+ic('doc')+'인수인계 문서</span><span class="v">'+secs.length+'<small>개</small></span><span class="s"><span>'+docGroups().filter(function(g){return secs.some(function(s){return docGroup(s)===g})}).length+'개 분류</span></span></button>'
     +'</div>';
   var pins=secs.filter(function(x){return x.pin});
-  if(pins.length)h+='<section class="blk"><div class="blk-h"><h2>자주 보는 문서</h2><span class="c">'+pins.length+'개</span></div><div class="pins">'+pins.map(function(x){return '<a class="pin '+grpCls(docGroup(x))+'" href="#/doc/'+encodeURIComponent(x.id)+'"><b>'+esc(x.title)+'</b><small>'+esc(x.lede)+'</small></a>'}).join('')+'</div></section>';
+  if(pins.length)h+='<section class="blk"><div class="blk-h"><h2>즐겨찾기</h2><span class="c">'+pins.length+'개</span></div><div class="pins">'+pins.map(function(x){return '<a class="pin '+grpCls(docGroup(x))+'" href="#/doc/'+encodeURIComponent(x.id)+'"><b><span class="pst">'+starSVG(true)+'</span>'+esc(x.title)+'</b><small>'+esc(x.lede)+'</small></a>'}).join('')+'</div></section>';
   if(links.length)h+='<section class="blk"><div class="blk-h"><h2>바로가기</h2><span class="c">자주 쓰는 사이트</span><button class="linkbtn r" data-act="home-edit">바로가기 편집</button></div><div class="shortcuts">'
     +links.map(function(l){var href=hrefOf(l.url);return href?'<a class="sc" href="'+esc(href)+'" target="_blank" rel="noopener"><span class="ico">'+initial(l.label)+'</span><span class="sc-t"><b>'+esc(l.label)+'</b><small>'+esc(shortUrl(l.url))+'</small></span>'+ic('ext','sc-x')+'</a>':'<span class="sc off"><span class="ico">'+initial(l.label)+'</span><span class="sc-t"><b>'+esc(l.label)+'</b><small>주소 없음</small></span></span>'}).join('')+'</div></section>';
   h+='<div class="split2">'
@@ -1344,7 +1369,7 @@ function homeHTML(){
   h+='<section class="blk" id="docs"><div class="blk-h"><h2>인수인계 문서</h2><span class="c">'+secs.length+'개</span><button class="btn sm r" data-act="sec-new">문서 추가</button></div>';
   docGroups().forEach(function(g){
     var ss=secs.filter(function(s){return docGroup(s)===g});if(!ss.length)return;
-    h+='<div class="dgroup '+grpCls(g)+'"><h3 class="dg-h">'+esc(g)+'</h3><div class="toc">'+ss.map(function(s){var n=countItems(s);return '<a class="card" href="#/doc/'+encodeURIComponent(s.id)+'"><h3>'+esc(s.title)+'</h3><p>'+esc(s.lede)+'</p><span class="meta">'+(s.groups||[]).length+'개 묶음 · '+n+'개 항목</span></a>'}).join('')+'</div></div>';
+    h+='<div class="dgroup '+grpCls(g)+'"><h3 class="dg-h">'+esc(g)+'</h3><div class="toc">'+ss.map(function(s){var n=countItems(s);return '<a class="card" href="#/doc/'+encodeURIComponent(s.id)+'"><h3>'+(s.pin?'<span class="cstar">'+starSVG(true)+'</span>':'')+esc(s.title)+'</h3><p>'+esc(s.lede)+'</p><span class="meta">'+(s.groups||[]).length+'개 묶음 · '+n+'개 항목</span></a>'}).join('')+'</div></div>';
   });
   return h+'</section>';
 }
@@ -1476,11 +1501,11 @@ function secHTML(id){
   var s=secById(id),secs=menuDocs(),i=secs.indexOf(s),g=docGroup(s);
   var h='<nav class="crumbs" aria-label="위치"><a href="#/home">홈</a><span>/</span><span>인수인계 문서</span><span>/</span><span>'+esc(g)+'</span></nav>'
     +'<section class="sec-head"><div><h1>'+esc(s.title)+'</h1><p class="lede">'+esc(s.lede)+'</p></div>'
-    +(S.editing===id?'':'<div class="r"><button class="btn" data-act="sec-edit">편집</button></div>')+'</section>';
+    +(S.editing===id?'':'<div class="r"><button class="btn star-t'+(s.pin?' on':'')+'" data-act="pin-toggle" data-sid="'+esc(s.id)+'" aria-pressed="'+(s.pin?'true':'false')+'">'+starSVG(s.pin)+(s.pin?'즐겨찾기됨':'즐겨찾기')+'</button><button class="btn" data-act="sec-edit">편집</button></div>')+'</section>';
   if(S.editing===id){
     h+='<div class="editor"><div class="field"><label for="se-title">제목</label><input class="inp" id="se-title" value="'+esc(s.title)+'"></div>'
       +'<div class="field"><label for="se-group">메뉴 분류</label><input class="inp" id="se-group" list="grp-list" value="'+esc(g)+'"><datalist id="grp-list">'+docGroups().map(function(x){return '<option value="'+esc(x)+'">'}).join('')+'</datalist><span class="hint">왼쪽 메뉴에서 이 분류 아래에 표시됩니다. 새 이름을 적으면 분류가 새로 생깁니다.</span></div>'
-      +'<label class="pinchk"><input type="checkbox" id="se-pin"'+(s.pin?' checked':'')+'> 홈의 "자주 보는 문서"에 표시</label>'
+      +'<label class="pinchk"><input type="checkbox" id="se-pin"'+(s.pin?' checked':'')+'> 즐겨찾기(별표)에 표시 · 왼쪽 메뉴와 홈 맨 위에 모아 보여줍니다</label>'
       +'<div class="field"><label for="se-lede">요약 한 줄</label><textarea class="inp" id="se-lede" rows="2">'+esc(s.lede)+'</textarea></div>';
     (s.groups||[]).forEach(function(gr,gi){
       var armed=S.armed==='g'+gi;
@@ -1648,6 +1673,7 @@ document.addEventListener('click',function(ev){
     case 'export':exportBackup();break;
     case 'master':S.masterOpen=!S.masterOpen;render();var m1=$('#ms-1');if(m1)m1.focus();break;
     case 'forget':forgetDevice().then(function(){toast('이 컴퓨터에서 기억을 해제했습니다. 다음에는 비밀번호를 입력해야 합니다.')});break;
+    case 'pin-toggle':{var ps=t.getAttribute('data-sid')||S.doc,p0=secById(ps);if(!p0)break;var po=Object.assign({},p0);if(po.pin)delete po.pin;else po.pin=true;if(t.blur)t.blur();put('sec_'+ps,po);render();toast(po.pin?'즐겨찾기에 추가했습니다':'즐겨찾기에서 뺐습니다');break}
     case 'jump':{var jt=null,jg=t.getAttribute('data-g'),jh=t.getAttribute('data-h');if(jg!=null)jt=document.getElementById('g-'+jg);else if(jh){jh=jh.replace(/_/g,' ');jt=[].slice.call(document.querySelectorAll('.groups .group')).filter(function(x){var h3=x.querySelector('h3');return h3&&h3.textContent.indexOf(jh)===0})[0]}if(jt)jt.scrollIntoView({behavior:'smooth',block:'start'});break}
     case 'scroll-docs':{var dz=$('#docs');if(dz)dz.scrollIntoView({behavior:'smooth',block:'start'});break}
     case 'home-edit':S.homeEdit=true;render();window.scrollTo(0,0);break;
